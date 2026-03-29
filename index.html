@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>합사 번수 계산기</title>
+  <style>
+    :root {
+      --bg: #f5efe6;
+      --panel: #fffaf3;
+      --ink: #2f241f;
+      --muted: #7b6a60;
+      --accent: #b55d3d;
+      --accent-strong: #8f4023;
+      --line: #e3d4c6;
+      --shadow: 0 18px 40px rgba(80, 53, 37, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Apple SD Gothic Neo", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(181, 93, 61, 0.16), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(114, 141, 109, 0.18), transparent 24%),
+        linear-gradient(180deg, #f8f3ec 0%, var(--bg) 100%);
+      min-height: 100vh;
+      padding: 32px 16px;
+    }
+
+    .app {
+      max-width: 920px;
+      margin: 0 auto;
+      background: rgba(255, 250, 243, 0.92);
+      border: 1px solid rgba(227, 212, 198, 0.8);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(8px);
+    }
+
+    .hero {
+      padding: 32px;
+      background: linear-gradient(135deg, rgba(181, 93, 61, 0.12), rgba(255, 255, 255, 0.12));
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.1;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 680px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 1.25fr 0.9fr;
+      gap: 24px;
+      padding: 24px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 20px;
+    }
+
+    .panel h2 {
+      margin: 0 0 8px;
+      font-size: 1.2rem;
+    }
+
+    .panel p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .yarn-list {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: end;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .field input {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      font-size: 1rem;
+      color: var(--ink);
+      background: #fff;
+    }
+
+    .field input:focus {
+      outline: 2px solid rgba(181, 93, 61, 0.22);
+      border-color: var(--accent);
+    }
+
+    button {
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 16px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.14s ease, background 0.14s ease, opacity 0.14s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    .primary {
+      background: var(--accent);
+      color: #fff8f4;
+    }
+
+    .primary:hover {
+      background: var(--accent-strong);
+    }
+
+    .secondary {
+      background: #efe3d7;
+      color: var(--ink);
+    }
+
+    .ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      padding-inline: 12px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .result-card {
+      display: grid;
+      gap: 16px;
+    }
+
+    .result-main {
+      background: linear-gradient(145deg, #fff, #f9f1e8);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 18px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .result-value {
+      margin: 0;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 700;
+    }
+
+    .formula,
+    .notes {
+      border: 1px dashed var(--line);
+      border-radius: 18px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.62);
+    }
+
+    .formula code {
+      display: block;
+      white-space: pre-wrap;
+      font-family: Consolas, monospace;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #533e34;
+    }
+
+    .notes ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .error {
+      margin-top: 10px;
+      color: #b3342c;
+      font-weight: 600;
+      min-height: 1.4em;
+    }
+
+    @media (max-width: 760px) {
+      .content {
+        grid-template-columns: 1fr;
+      }
+
+      .hero,
+      .content {
+        padding: 18px;
+      }
+
+      .row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="hero">
+      <h1>합사 번수 계산기</h1>
+      <p>
+        서로 다른 실을 여러 가닥 합쳤을 때의 최종 번수를 계산합니다.
+        공식은 <strong>1 / 최종 번수 = 1/N1 + 1/N2 + ...</strong> 를 사용하며,
+        결과는 참고용이므로 실제 뜨개 전에는 게이지 스와치를 함께 확인하는 것이 좋아요.
+      </p>
+    </section>
+
+    <section class="content">
+      <section class="panel">
+        <h2>실 정보 입력</h2>
+        <p>각 가닥의 번수를 입력하세요. 같은 실을 3합, 4합으로 쓰는 경우도 한 줄씩 추가하면 됩니다.</p>
+
+        <div class="yarn-list" id="yarn-list"></div>
+
+        <div class="actions">
+          <button class="secondary" id="add-row" type="button">가닥 추가</button>
+          <button class="primary" id="calculate" type="button">계산하기</button>
+          <button class="ghost" id="reset" type="button">초기화</button>
+        </div>
+
+        <p class="error" id="error"></p>
+      </section>
+
+      <aside class="panel">
+        <h2>계산 결과</h2>
+        <div class="result-card">
+          <div class="result-main">
+            <p class="eyebrow">예상 최종 번수</p>
+            <p class="result-value" id="result-value">-</p>
+          </div>
+
+          <div class="formula">
+            <p class="eyebrow">적용 공식</p>
+            <code id="formula-text">값을 입력하면 계산식이 여기에 표시됩니다.</code>
+          </div>
+
+          <div class="notes">
+            <p class="eyebrow">실전 메모</p>
+            <ul>
+              <li>숫자가 작을수록 더 굵은 실입니다.</li>
+              <li>같은 번수 여러 가닥은 사실상 `번수 ÷ 가닥 수`와 같은 결과가 납니다.</li>
+              <li>재질, 꼬임, 탄성 차이 때문에 최종 느낌은 게이지가 가장 중요합니다.</li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const yarnList = document.getElementById("yarn-list");
+    const addRowButton = document.getElementById("add-row");
+    const calculateButton = document.getElementById("calculate");
+    const resetButton = document.getElementById("reset");
+    const resultValue = document.getElementById("result-value");
+    const formulaText = document.getElementById("formula-text");
+    const errorText = document.getElementById("error");
+
+    let rowCount = 0;
+
+    function createRow(value = "") {
+      rowCount += 1;
+
+      const row = document.createElement("div");
+      row.className = "row";
+      row.dataset.rowId = String(rowCount);
+
+      row.innerHTML = `
+        <div class="field">
+          <label for="count-${rowCount}">실 ${rowCount} 번수</label>
+          <input
+            id="count-${rowCount}"
+            class="count-input"
+            type="number"
+            min="0.0001"
+            step="any"
+            inputmode="decimal"
+            placeholder="예: 20"
+            value="${value}"
+          />
+        </div>
+        <button class="ghost remove-row" type="button">삭제</button>
+      `;
+
+      const removeButton = row.querySelector(".remove-row");
+      removeButton.addEventListener("click", () => {
+        if (yarnList.children.length <= 2) {
+          errorText.textContent = "최소 2가닥은 남겨두어야 계산할 수 있어요.";
+          return;
+        }
+
+        row.remove();
+        renumberRows();
+      });
+
+      yarnList.appendChild(row);
+    }
+
+    function renumberRows() {
+      const rows = [...document.querySelectorAll(".row")];
+      rows.forEach((row, index) => {
+        const number = index + 1;
+        const label = row.querySelector("label");
+        const input = row.querySelector("input");
+
+        row.dataset.rowId = String(number);
+        label.setAttribute("for", `count-${number}`);
+        label.textContent = `실 ${number} 번수`;
+        input.id = `count-${number}`;
+      });
+      rowCount = rows.length;
+    }
+
+    function getCounts() {
+      return [...document.querySelectorAll(".count-input")]
+        .map((input) => Number(input.value))
+        .filter((value) => !Number.isNaN(value));
+    }
+
+    function calculateCombinedCount(counts) {
+      const inverseSum = counts.reduce((sum, count) => sum + 1 / count, 0);
+      return 1 / inverseSum;
+    }
+
+    function formatCount(value) {
+      if (!Number.isFinite(value)) {
+        return "-";
+      }
+
+      const rounded = value.toFixed(2);
+      return `${Number(rounded).toLocaleString("ko-KR")}수`;
+    }
+
+    function calculate() {
+      errorText.textContent = "";
+      const counts = getCounts();
+
+      if (counts.length < 2) {
+        errorText.textContent = "2가닥 이상 입력해야 계산할 수 있어요.";
+        resultValue.textContent = "-";
+        formulaText.textContent = "값을 입력하면 계산식이 여기에 표시됩니다.";
+        return;
+      }
+
+      if (counts.some((count) => count <= 0)) {
+        errorText.textContent = "번수는 0보다 큰 숫자로 입력해주세요.";
+        resultValue.textContent = "-";
+        formulaText.textContent = "값을 입력하면 계산식이 여기에 표시됩니다.";
+        return;
+      }
+
+      const inverseTerms = counts.map((count) => `1/${count}`);
+      const inverseSum = counts.reduce((sum, count) => sum + 1 / count, 0);
+      const combinedCount = calculateCombinedCount(counts);
+
+      resultValue.textContent = formatCount(combinedCount);
+      formulaText.textContent =
+        `1 / 최종 번수 = ${inverseTerms.join(" + ")}\n` +
+        `1 / 최종 번수 = ${inverseSum.toFixed(6)}\n` +
+        `최종 번수 = ${combinedCount.toFixed(6)}\n` +
+        `대략 ${formatCount(combinedCount)} 정도 굵기`;
+    }
+
+    function reset() {
+      yarnList.innerHTML = "";
+      rowCount = 0;
+      createRow("20");
+      createRow("20");
+      resultValue.textContent = "-";
+      formulaText.textContent = "값을 입력하면 계산식이 여기에 표시됩니다.";
+      errorText.textContent = "";
+    }
+
+    addRowButton.addEventListener("click", () => {
+      errorText.textContent = "";
+      createRow("");
+    });
+
+    calculateButton.addEventListener("click", calculate);
+    resetButton.addEventListener("click", reset);
+
+    reset();
+  </script>
+</body>
+</html>
