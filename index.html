@@ -3,17 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>합사 번수 계산기</title>
+  <title>뜨개 게이지 환산기</title>
   <style>
     :root {
-      --bg: #f5efe6;
-      --panel: #fffaf3;
-      --ink: #2f241f;
-      --muted: #7b6a60;
-      --accent: #b55d3d;
-      --accent-strong: #8f4023;
-      --line: #e3d4c6;
-      --shadow: 0 18px 40px rgba(80, 53, 37, 0.12);
+      --bg: #f3efe8;
+      --bg-strong: #e7ddcf;
+      --panel: rgba(255, 250, 243, 0.88);
+      --panel-solid: #fffaf3;
+      --ink: #31271f;
+      --muted: #76685f;
+      --accent: #b55c3b;
+      --accent-deep: #8e4127;
+      --sage: #738a71;
+      --line: #ddcfc1;
+      --shadow: 0 18px 42px rgba(78, 55, 40, 0.12);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
     }
 
     * {
@@ -22,89 +28,174 @@
 
     body {
       margin: 0;
-      font-family: "Segoe UI", "Apple SD Gothic Neo", sans-serif;
-      color: var(--ink);
-      background:
-        radial-gradient(circle at top left, rgba(181, 93, 61, 0.16), transparent 28%),
-        radial-gradient(circle at bottom right, rgba(114, 141, 109, 0.18), transparent 24%),
-        linear-gradient(180deg, #f8f3ec 0%, var(--bg) 100%);
       min-height: 100vh;
-      padding: 32px 16px;
+      color: var(--ink);
+      font-family: "Segoe UI", "Apple SD Gothic Neo", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(181, 92, 59, 0.18), transparent 30%),
+        radial-gradient(circle at 85% 15%, rgba(115, 138, 113, 0.18), transparent 22%),
+        linear-gradient(180deg, #faf6f0 0%, var(--bg) 100%);
+      padding: 28px 16px 48px;
     }
 
     .app {
-      max-width: 920px;
+      width: min(1120px, 100%);
       margin: 0 auto;
-      background: rgba(255, 250, 243, 0.92);
-      border: 1px solid rgba(227, 212, 198, 0.8);
-      border-radius: 28px;
+      background: rgba(255, 249, 242, 0.72);
+      border: 1px solid rgba(221, 207, 193, 0.8);
+      backdrop-filter: blur(12px);
+      border-radius: 34px;
       box-shadow: var(--shadow);
       overflow: hidden;
-      backdrop-filter: blur(8px);
     }
 
     .hero {
-      padding: 32px;
-      background: linear-gradient(135deg, rgba(181, 93, 61, 0.12), rgba(255, 255, 255, 0.12));
+      padding: 34px;
+      background:
+        linear-gradient(135deg, rgba(181, 92, 59, 0.12), transparent 58%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.08));
       border-bottom: 1px solid var(--line);
     }
 
-    .hero h1 {
-      margin: 0 0 10px;
-      font-size: clamp(2rem, 4vw, 3rem);
-      line-height: 1.1;
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 250, 243, 0.92);
+      color: var(--accent-deep);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 4.3vw, 3.4rem);
+      line-height: 1.05;
     }
 
     .hero p {
       margin: 0;
-      max-width: 680px;
+      max-width: 760px;
       color: var(--muted);
-      line-height: 1.6;
+      line-height: 1.7;
+      font-size: 1rem;
     }
 
-    .content {
+    .hero-summary {
       display: grid;
-      grid-template-columns: 1.25fr 0.9fr;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .summary-chip {
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255, 250, 243, 0.76);
+      border: 1px solid rgba(221, 207, 193, 0.9);
+    }
+
+    .summary-chip strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+    }
+
+    .summary-chip span {
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 0.94rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
       gap: 24px;
       padding: 24px;
     }
 
     .panel {
-      background: var(--panel);
       border: 1px solid var(--line);
-      border-radius: 22px;
-      padding: 20px;
+      border-radius: var(--radius-xl);
+      background: var(--panel);
+      padding: 22px;
     }
 
-    .panel h2 {
+    .stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .section-card {
+      background: var(--panel-solid);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+    }
+
+    .section-card h2,
+    .section-card h3 {
       margin: 0 0 8px;
-      font-size: 1.2rem;
+      font-size: 1.12rem;
     }
 
-    .panel p {
-      margin: 0 0 18px;
+    .section-card p {
+      margin: 0 0 16px;
       color: var(--muted);
-      line-height: 1.55;
+      line-height: 1.6;
     }
 
-    .yarn-list {
+    .gauge-compare {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .gauge-group {
+      padding: 16px;
+      border-radius: 18px;
+      background: #fffdf9;
+      border: 1px solid #ebdfd2;
+    }
+
+    .gauge-group h3 {
+      margin: 0 0 12px;
+      font-size: 1rem;
+    }
+
+    .gauge-divider {
+      width: 1px;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          #d9c6b6 0 8px,
+          transparent 8px 16px
+        );
+      border-radius: 999px;
+    }
+
+    .grid {
       display: grid;
       gap: 12px;
-      margin-bottom: 18px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .row {
+    .grid-3 {
       display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 10px;
-      align-items: end;
+      gap: 12px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
     .field label {
       display: block;
       margin-bottom: 6px;
-      font-size: 0.92rem;
       color: var(--muted);
+      font-size: 0.92rem;
     }
 
     .field input {
@@ -118,17 +209,30 @@
     }
 
     .field input:focus {
-      outline: 2px solid rgba(181, 93, 61, 0.22);
+      outline: 2px solid rgba(181, 92, 59, 0.2);
       border-color: var(--accent);
+    }
+
+    .input-help {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
     }
 
     button {
       border: 0;
+      cursor: pointer;
       border-radius: 14px;
       padding: 12px 16px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
+      font-size: 0.96rem;
+      font-weight: 700;
       transition: transform 0.14s ease, background 0.14s ease, opacity 0.14s ease;
     }
 
@@ -138,11 +242,11 @@
 
     .primary {
       background: var(--accent);
-      color: #fff8f4;
+      color: #fffaf5;
     }
 
     .primary:hover {
-      background: var(--accent-strong);
+      background: var(--accent-deep);
     }
 
     .secondary {
@@ -150,86 +254,147 @@
       color: var(--ink);
     }
 
-    .ghost {
-      background: transparent;
-      color: var(--muted);
-      border: 1px solid var(--line);
-      padding-inline: 12px;
+    .results {
+      display: grid;
+      gap: 16px;
+      align-content: start;
     }
 
-    .actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+    .result-hero {
+      padding: 22px;
+      border-radius: var(--radius-xl);
+      color: #fffaf5;
+      background:
+        linear-gradient(145deg, rgba(49, 39, 31, 0.14), rgba(49, 39, 31, 0)),
+        linear-gradient(135deg, var(--accent), #ce8058 65%, #dfb08f 100%);
+    }
+
+    .result-hero .eyebrow,
+    .result-card .eyebrow {
+      margin: 0 0 8px;
+      font-size: 0.88rem;
+      opacity: 0.9;
+      letter-spacing: 0.02em;
+    }
+
+    .result-hero h2 {
+      margin: 0;
+      font-size: clamp(1.6rem, 4vw, 2.5rem);
+      line-height: 1.15;
+    }
+
+    .result-hero p {
+      margin: 12px 0 0;
+      line-height: 1.6;
+      color: rgba(255, 250, 245, 0.92);
     }
 
     .result-card {
-      display: grid;
-      gap: 16px;
-    }
-
-    .result-main {
-      background: linear-gradient(145deg, #fff, #f9f1e8);
-      border: 1px solid var(--line);
-      border-radius: 20px;
       padding: 18px;
+      background: var(--panel-solid);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
     }
 
-    .eyebrow {
-      margin: 0 0 8px;
+    .result-card h3 {
+      margin: 0 0 12px;
+      font-size: 1.02rem;
+    }
+
+    .stat-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .stat-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #fbf6ef;
+      border: 1px solid #ebdfd2;
+    }
+
+    .stat-item strong {
+      font-size: 1rem;
+    }
+
+    .stat-item span {
       color: var(--muted);
-      font-size: 0.9rem;
+      line-height: 1.5;
+      text-align: right;
     }
 
-    .result-value {
-      margin: 0;
-      font-size: clamp(1.8rem, 4vw, 2.6rem);
-      font-weight: 700;
-    }
-
-    .formula,
-    .notes {
-      border: 1px dashed var(--line);
-      border-radius: 18px;
-      padding: 16px;
-      background: rgba(255, 255, 255, 0.62);
-    }
-
-    .formula code {
-      display: block;
+    .formula {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px dashed #d8c6b7;
+      background: #fffcf8;
       white-space: pre-wrap;
+      line-height: 1.65;
+      color: #5a4a40;
       font-family: Consolas, monospace;
-      font-size: 0.95rem;
-      line-height: 1.6;
-      color: #533e34;
+      font-size: 0.93rem;
     }
 
-    .notes ul {
+    .tip-list {
+      display: grid;
+      gap: 10px;
       margin: 0;
-      padding-left: 18px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .tip-list li {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #f8f2ea;
+      border: 1px solid #eadccc;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+
+    .note {
+      margin-top: 12px;
       color: var(--muted);
       line-height: 1.6;
+      font-size: 0.92rem;
     }
 
-    .error {
-      margin-top: 10px;
-      color: #b3342c;
-      font-weight: 600;
-      min-height: 1.4em;
-    }
-
-    @media (max-width: 760px) {
-      .content {
+    @media (max-width: 900px) {
+      .layout {
         grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding: 14px 10px 28px;
       }
 
       .hero,
-      .content {
+      .layout {
         padding: 18px;
       }
 
-      .row {
+      .hero-summary,
+      .grid,
+      .grid-3,
+      .gauge-compare {
         grid-template-columns: 1fr;
+      }
+
+      .gauge-divider {
+        width: 100%;
+        height: 1px;
+        background:
+          repeating-linear-gradient(
+            to right,
+            #d9c6b6 0 8px,
+            transparent 8px 16px
+          );
       }
     }
   </style>
@@ -237,187 +402,332 @@
 <body>
   <main class="app">
     <section class="hero">
-      <h1>합사 번수 계산기</h1>
+      <div class="hero-kicker">Gauge to Size</div>
+      <h1>뜨개 게이지 환산기</h1>
       <p>
-        서로 다른 실을 여러 가닥 합쳤을 때의 최종 번수를 계산합니다.
-        공식은 <strong>1 / 최종 번수 = 1/N1 + 1/N2 + ...</strong> 를 사용하며,
-        결과는 참고용이므로 실제 뜨개 전에는 게이지 스와치를 함께 확인하는 것이 좋아요.
+        도안 게이지와 내 스와치 게이지만 넣으면 완성 편물이 얼마나 커지거나 작아지는지 바로 예측할 수 있습니다.<br />
+        같은 페이지에서 코수 환산, 단수 환산, 원하는 cm 기준 계산까지 함께 처리하도록 만들었습니다.
       </p>
+
+      <div class="hero-summary">
+        <div class="summary-chip">
+          <strong>완성 크기 예측</strong>
+          <span>도안 대비 가로와 세로 비율을 계산해 실제 완성 사이즈를 보여줍니다.</span>
+        </div>
+        <div class="summary-chip">
+          <strong>코수와 단수 환산</strong>
+          <span>기존 코수나 단수를 새 게이지에 맞게 바로 변환합니다.</span>
+        </div>
+        <div class="summary-chip">
+          <strong>원하는 길이 기준 계산</strong>
+          <span>내 게이지로 폭이나 길이를 cm 기준으로 다시 계산할 수 있습니다.</span>
+        </div>
+      </div>
     </section>
 
-    <section class="content">
-      <section class="panel">
-        <h2>실 정보 입력</h2>
-        <p>각 가닥의 번수를 입력하세요. 같은 실을 3합, 4합으로 쓰는 경우도 한 줄씩 추가하면 됩니다.</p>
+    <section class="layout">
+      <section class="panel stack">
+        <section class="section-card">
+          <h2>1. 게이지 입력</h2>
+          <p>게이지 값은 보통 10cm 기준으로 입력합니다. 코 게이지는 가로, 단 게이지는 세로를 기준으로 보면 됩니다.</p>
+          <div class="gauge-compare">
+            <div class="gauge-group">
+              <h3>도안 게이지</h3>
+              <div class="grid">
+                <div class="field">
+                  <label for="pattern-stitches">코 게이지</label>
+                  <input id="pattern-stitches" type="number" min="0.01" step="any" value="20" />
+                </div>
+                <div class="field">
+                  <label for="pattern-rows">단 게이지</label>
+                  <input id="pattern-rows" type="number" min="0.01" step="any" value="30" />
+                </div>
+              </div>
+            </div>
 
-        <div class="yarn-list" id="yarn-list"></div>
+            <div class="gauge-divider" aria-hidden="true"></div>
 
-        <div class="actions">
-          <button class="secondary" id="add-row" type="button">가닥 추가</button>
-          <button class="primary" id="calculate" type="button">계산하기</button>
-          <button class="ghost" id="reset" type="button">초기화</button>
-        </div>
+            <div class="gauge-group">
+              <h3>내 스와치 게이지</h3>
+              <div class="grid">
+                <div class="field">
+                  <label for="my-stitches">코 게이지</label>
+                  <input id="my-stitches" type="number" min="0.01" step="any" value="24" />
+                </div>
+                <div class="field">
+                  <label for="my-rows">단 게이지</label>
+                  <input id="my-rows" type="number" min="0.01" step="any" value="36" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="input-help">예: 도안 20코 / 30단, 내 스와치 24코 / 36단이면 같은 코수로 떴을 때 전체가 더 작아집니다.</p>
+        </section>
 
-        <p class="error" id="error"></p>
+        <section class="section-card">
+          <h2>2. 도안 완성 사이즈</h2>
+          <p>도안에 적힌 최종 치수를 넣으면 내 게이지로 떴을 때의 예상 완성 치수를 계산합니다.</p>
+          <div class="grid">
+            <div class="field">
+              <label for="pattern-width">도안 폭 또는 가슴둘레 (cm)</label>
+              <input id="pattern-width" type="number" min="0.01" step="any" value="100" />
+            </div>
+            <div class="field">
+              <label for="pattern-length">도안 총장 또는 길이 (cm)</label>
+              <input id="pattern-length" type="number" min="0.01" step="any" value="56" />
+            </div>
+          </div>
+        </section>
+
+        <section class="section-card">
+          <h2>3. 코수와 단수 환산</h2>
+          <p>도안에 적힌 코수와 단수를 내 게이지에 맞춰 새 값으로 바꿉니다.</p>
+          <div class="grid">
+            <div class="field">
+              <label for="pattern-cast-on">도안 시작 코수</label>
+              <input id="pattern-cast-on" type="number" min="0" step="any" value="100" />
+            </div>
+            <div class="field">
+              <label for="pattern-row-count">도안 구간 단수</label>
+              <input id="pattern-row-count" type="number" min="0" step="any" value="60" />
+            </div>
+          </div>
+        </section>
+
+        <section class="section-card">
+          <h2>4. 원하는 cm 기준 계산</h2>
+          <p>내 게이지로 정확히 맞추고 싶은 실제 폭 또는 가슴둘레와 길이를 입력하면 필요한 코수와 단수를 계산합니다.</p>
+          <div class="grid">
+            <div class="field">
+              <label for="target-width">원하는 폭 또는 가슴둘레 (cm)</label>
+              <input id="target-width" type="number" min="0" step="any" value="45" />
+            </div>
+            <div class="field">
+              <label for="target-length">원하는 길이 (cm)</label>
+              <input id="target-length" type="number" min="0" step="any" value="22" />
+            </div>
+          </div>
+
+          <div class="button-row">
+            <button class="primary" id="calculate" type="button">계산하기</button>
+            <button class="secondary" id="reset" type="button">예시로 되돌리기</button>
+          </div>
+          <p class="note">실전에서는 세탁 후 스와치 기준으로 계산하는 편이 더 정확합니다.</p>
+        </section>
       </section>
 
-      <aside class="panel">
-        <h2>계산 결과</h2>
-        <div class="result-card">
-          <div class="result-main">
-            <p class="eyebrow">예상 최종 번수</p>
-            <p class="result-value" id="result-value">-</p>
-          </div>
+      <aside class="results">
+        <section class="result-hero">
+          <p class="eyebrow">도안 대비 예상 결과</p>
+          <h2 id="size-summary">가로 83%, 세로 83%</h2>
+          <p id="size-description">현재 입력값 기준으로 같은 코수와 단수로 뜨면 도안보다 약 17% 작게 나옵니다.</p>
+        </section>
 
-          <div class="formula">
-            <p class="eyebrow">적용 공식</p>
-            <code id="formula-text">값을 입력하면 계산식이 여기에 표시됩니다.</code>
+        <section class="result-card">
+          <h3>완성 사이즈 예측</h3>
+          <div class="stat-list">
+            <div class="stat-item">
+              <strong id="predicted-width">83.33 cm</strong>
+              <span>예상 폭 또는 가슴둘레</span>
+            </div>
+            <div class="stat-item">
+              <strong id="predicted-length">46.67 cm</strong>
+              <span>예상 총장 또는 세로 길이</span>
+            </div>
           </div>
+          <div class="formula" id="ratio-formula"></div>
+        </section>
 
-          <div class="notes">
-            <p class="eyebrow">실전 메모</p>
-            <ul>
-              <li>숫자가 작을수록 더 굵은 실입니다.</li>
-              <li>같은 번수 여러 가닥은 사실상 `번수 ÷ 가닥 수`와 같은 결과가 납니다.</li>
-              <li>재질, 꼬임, 탄성 차이 때문에 최종 느낌은 게이지가 가장 중요합니다.</li>
-            </ul>
+        <section class="result-card">
+          <h3>코수와 단수 환산</h3>
+          <div class="stat-list">
+            <div class="stat-item">
+              <strong id="converted-stitches">120코</strong>
+              <span>같은 폭을 위한 새 코수</span>
+            </div>
+            <div class="stat-item">
+              <strong id="converted-rows">72단</strong>
+              <span>같은 길이를 위한 새 단수</span>
+            </div>
           </div>
-        </div>
+          <div class="formula" id="conversion-formula"></div>
+        </section>
+
+        <section class="result-card">
+          <h3>원하는 cm 기준 계산</h3>
+          <div class="stat-list">
+            <div class="stat-item">
+              <strong id="target-stitches">108코</strong>
+              <span>원하는 폭 또는 가슴둘레를 위한 코수</span>
+            </div>
+            <div class="stat-item">
+              <strong id="target-rows">79단</strong>
+              <span>원하는 길이를 위한 단수</span>
+            </div>
+          </div>
+          <div class="formula" id="target-formula"></div>
+        </section>
+
+        <section class="result-card">
+          <h3>실전 메모</h3>
+          <ul class="tip-list">
+            <li>코 게이지 차이가 10%를 넘기면 완성 폭이 눈에 띄게 달라질 수 있습니다.</li>
+            <li>단 게이지가 다르면 총장, 암홀 깊이, 소매 길이가 특히 많이 틀어집니다.</li>
+            <li>합사, 무늬, 세탁 전후 수축이 있으면 스와치를 같은 조건으로 다시 떠서 확인하는 편이 안전합니다.</li>
+          </ul>
+        </section>
       </aside>
     </section>
   </main>
 
   <script>
-    const yarnList = document.getElementById("yarn-list");
-    const addRowButton = document.getElementById("add-row");
-    const calculateButton = document.getElementById("calculate");
-    const resetButton = document.getElementById("reset");
-    const resultValue = document.getElementById("result-value");
-    const formulaText = document.getElementById("formula-text");
-    const errorText = document.getElementById("error");
+    const defaults = {
+      patternStitches: 20,
+      myStitches: 24,
+      patternRows: 30,
+      myRows: 36,
+      patternWidth: 100,
+      patternLength: 56,
+      patternCastOn: 100,
+      patternRowCount: 60,
+      targetWidth: 95,
+      targetLength: 50
+    };
 
-    let rowCount = 0;
+    const inputs = {
+      patternStitches: document.getElementById("pattern-stitches"),
+      myStitches: document.getElementById("my-stitches"),
+      patternRows: document.getElementById("pattern-rows"),
+      myRows: document.getElementById("my-rows"),
+      patternWidth: document.getElementById("pattern-width"),
+      patternLength: document.getElementById("pattern-length"),
+      patternCastOn: document.getElementById("pattern-cast-on"),
+      patternRowCount: document.getElementById("pattern-row-count"),
+      targetWidth: document.getElementById("target-width"),
+      targetLength: document.getElementById("target-length")
+    };
 
-    function createRow(value = "") {
-      rowCount += 1;
+    const outputs = {
+      sizeSummary: document.getElementById("size-summary"),
+      sizeDescription: document.getElementById("size-description"),
+      predictedWidth: document.getElementById("predicted-width"),
+      predictedLength: document.getElementById("predicted-length"),
+      ratioFormula: document.getElementById("ratio-formula"),
+      convertedStitches: document.getElementById("converted-stitches"),
+      convertedRows: document.getElementById("converted-rows"),
+      conversionFormula: document.getElementById("conversion-formula"),
+      targetStitches: document.getElementById("target-stitches"),
+      targetRows: document.getElementById("target-rows"),
+      targetFormula: document.getElementById("target-formula")
+    };
 
-      const row = document.createElement("div");
-      row.className = "row";
-      row.dataset.rowId = String(rowCount);
-
-      row.innerHTML = `
-        <div class="field">
-          <label for="count-${rowCount}">실 ${rowCount} 번수</label>
-          <input
-            id="count-${rowCount}"
-            class="count-input"
-            type="number"
-            min="0.0001"
-            step="any"
-            inputmode="decimal"
-            placeholder="예: 20"
-            value="${value}"
-          />
-        </div>
-        <button class="ghost remove-row" type="button">삭제</button>
-      `;
-
-      const removeButton = row.querySelector(".remove-row");
-      removeButton.addEventListener("click", () => {
-        if (yarnList.children.length <= 2) {
-          errorText.textContent = "최소 2가닥은 남겨두어야 계산할 수 있어요.";
-          return;
-        }
-
-        row.remove();
-        renumberRows();
-      });
-
-      yarnList.appendChild(row);
+    function readNumber(input) {
+      return Number(input.value);
     }
 
-    function renumberRows() {
-      const rows = [...document.querySelectorAll(".row")];
-      rows.forEach((row, index) => {
-        const number = index + 1;
-        const label = row.querySelector("label");
-        const input = row.querySelector("input");
-
-        row.dataset.rowId = String(number);
-        label.setAttribute("for", `count-${number}`);
-        label.textContent = `실 ${number} 번수`;
-        input.id = `count-${number}`;
-      });
-      rowCount = rows.length;
+    function isPositiveNumber(value) {
+      return Number.isFinite(value) && value > 0;
     }
 
-    function getCounts() {
-      return [...document.querySelectorAll(".count-input")]
-        .map((input) => Number(input.value))
-        .filter((value) => !Number.isNaN(value));
+    function formatNumber(value, digits = 2) {
+      return Number(value.toFixed(digits)).toLocaleString("ko-KR");
     }
 
-    function calculateCombinedCount(counts) {
-      const inverseSum = counts.reduce((sum, count) => sum + 1 / count, 0);
-      return 1 / inverseSum;
+    function formatPercent(value) {
+      return `${formatNumber(value * 100, 2)}%`;
     }
 
-    function formatCount(value) {
-      if (!Number.isFinite(value)) {
-        return "-";
+    function describeRatio(ratio) {
+      const percentDelta = Math.abs((1 - ratio) * 100);
+      if (Math.abs(ratio - 1) < 0.001) {
+        return "도안과 거의 같은 크기";
       }
 
-      const rounded = value.toFixed(2);
-      return `${Number(rounded).toLocaleString("ko-KR")}수`;
+      return ratio > 1
+        ? `도안보다 약 ${formatNumber(percentDelta, 1)}% 크게`
+        : `도안보다 약 ${formatNumber(percentDelta, 1)}% 작게`;
     }
 
     function calculate() {
-      errorText.textContent = "";
-      const counts = getCounts();
+      const values = Object.fromEntries(
+        Object.entries(inputs).map(([key, input]) => [key, readNumber(input)])
+      );
 
-      if (counts.length < 2) {
-        errorText.textContent = "2가닥 이상 입력해야 계산할 수 있어요.";
-        resultValue.textContent = "-";
-        formulaText.textContent = "값을 입력하면 계산식이 여기에 표시됩니다.";
+      const requiredKeys = [
+        "patternStitches",
+        "myStitches",
+        "patternRows",
+        "myRows",
+        "patternWidth",
+        "patternLength"
+      ];
+
+      const invalid = requiredKeys.some((key) => !isPositiveNumber(values[key]));
+      if (invalid) {
         return;
       }
 
-      if (counts.some((count) => count <= 0)) {
-        errorText.textContent = "번수는 0보다 큰 숫자로 입력해주세요.";
-        resultValue.textContent = "-";
-        formulaText.textContent = "값을 입력하면 계산식이 여기에 표시됩니다.";
-        return;
-      }
+      const widthRatio = values.patternStitches / values.myStitches;
+      const lengthRatio = values.patternRows / values.myRows;
 
-      const inverseTerms = counts.map((count) => `1/${count}`);
-      const inverseSum = counts.reduce((sum, count) => sum + 1 / count, 0);
-      const combinedCount = calculateCombinedCount(counts);
+      const predictedWidth = values.patternWidth * widthRatio;
+      const predictedLength = values.patternLength * lengthRatio;
 
-      resultValue.textContent = formatCount(combinedCount);
-      formulaText.textContent =
-        `1 / 최종 번수 = ${inverseTerms.join(" + ")}\n` +
-        `1 / 최종 번수 = ${inverseSum.toFixed(6)}\n` +
-        `최종 번수 = ${combinedCount.toFixed(6)}\n` +
-        `대략 ${formatCount(combinedCount)} 정도 굵기`;
+      const convertedStitches = isPositiveNumber(values.patternCastOn)
+        ? values.patternCastOn * (values.myStitches / values.patternStitches)
+        : 0;
+      const convertedRows = isPositiveNumber(values.patternRowCount)
+        ? values.patternRowCount * (values.myRows / values.patternRows)
+        : 0;
+
+      const targetStitches = isPositiveNumber(values.targetWidth)
+        ? (values.myStitches / 10) * values.targetWidth
+        : 0;
+      const targetRows = isPositiveNumber(values.targetLength)
+        ? (values.myRows / 10) * values.targetLength
+        : 0;
+
+      outputs.sizeSummary.textContent = `가로 ${formatPercent(widthRatio)}, 세로 ${formatPercent(lengthRatio)}`;
+      outputs.sizeDescription.textContent =
+        `현재 입력값 기준으로 같은 코수와 단수로 뜨면 가로는 ${describeRatio(widthRatio)}, 세로는 ${describeRatio(lengthRatio)} 나옵니다.`;
+
+      outputs.predictedWidth.textContent = `${formatNumber(predictedWidth)} cm`;
+      outputs.predictedLength.textContent = `${formatNumber(predictedLength)} cm`;
+      outputs.ratioFormula.textContent =
+        `가로 비율 = 도안 코 게이지 ÷ 내 코 게이지 = ${values.patternStitches} ÷ ${values.myStitches} = ${widthRatio.toFixed(4)}\n` +
+        `세로 비율 = 도안 단 게이지 ÷ 내 단 게이지 = ${values.patternRows} ÷ ${values.myRows} = ${lengthRatio.toFixed(4)}\n` +
+        `예상 폭 = ${values.patternWidth} × ${widthRatio.toFixed(4)} = ${predictedWidth.toFixed(2)} cm\n` +
+        `예상 길이 = ${values.patternLength} × ${lengthRatio.toFixed(4)} = ${predictedLength.toFixed(2)} cm`;
+
+      outputs.convertedStitches.textContent = `${formatNumber(convertedStitches)}코`;
+      outputs.convertedRows.textContent = `${formatNumber(convertedRows)}단`;
+      outputs.conversionFormula.textContent =
+        `새 코수 = 기존 코수 × (내 코 게이지 ÷ 도안 코 게이지)\n` +
+        `${values.patternCastOn} × (${values.myStitches} ÷ ${values.patternStitches}) = ${convertedStitches.toFixed(2)}코\n\n` +
+        `새 단수 = 기존 단수 × (내 단 게이지 ÷ 도안 단 게이지)\n` +
+        `${values.patternRowCount} × (${values.myRows} ÷ ${values.patternRows}) = ${convertedRows.toFixed(2)}단`;
+
+      outputs.targetStitches.textContent = `${formatNumber(targetStitches)}코`;
+      outputs.targetRows.textContent = `${formatNumber(targetRows)}단`;
+      outputs.targetFormula.textContent =
+        `필요 코수 = (내 코 게이지 ÷ 10) × 원하는 폭\n` +
+        `(${values.myStitches} ÷ 10) × ${values.targetWidth} = ${targetStitches.toFixed(2)}코\n\n` +
+        `필요 단수 = (내 단 게이지 ÷ 10) × 원하는 길이\n` +
+        `(${values.myRows} ÷ 10) × ${values.targetLength} = ${targetRows.toFixed(2)}단`;
     }
 
     function reset() {
-      yarnList.innerHTML = "";
-      rowCount = 0;
-      createRow("20");
-      createRow("20");
-      resultValue.textContent = "-";
-      formulaText.textContent = "값을 입력하면 계산식이 여기에 표시됩니다.";
-      errorText.textContent = "";
+      Object.entries(defaults).forEach(([key, value]) => {
+        inputs[key].value = value;
+      });
+      calculate();
     }
 
-    addRowButton.addEventListener("click", () => {
-      errorText.textContent = "";
-      createRow("");
+    document.getElementById("calculate").addEventListener("click", calculate);
+    document.getElementById("reset").addEventListener("click", reset);
+    Object.values(inputs).forEach((input) => {
+      input.addEventListener("input", calculate);
     });
-
-    calculateButton.addEventListener("click", calculate);
-    resetButton.addEventListener("click", reset);
 
     reset();
   </script>
