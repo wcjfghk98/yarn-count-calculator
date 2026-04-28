@@ -3,133 +3,279 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>합사 번수 계산기</title>
+  <meta name="theme-color" content="#f36f45" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>스위치온 다이어트 컴패니언</title>
+  <link rel="manifest" href="manifest.json" />
   <style>
     :root {
-      --bg: #f5efe6;
-      --panel: #fffaf3;
-      --ink: #2f241f;
-      --muted: #7b6a60;
-      --accent: #b55d3d;
-      --accent-strong: #8f4023;
-      --line: #e3d4c6;
-      --shadow: 0 18px 40px rgba(80, 53, 37, 0.12);
+      --bg: #fbf6ef;
+      --panel: rgba(255, 251, 245, 0.92);
+      --panel-strong: #fff8ef;
+      --ink: #2e221d;
+      --muted: #6f6259;
+      --line: rgba(132, 107, 92, 0.18);
+      --accent: #f36f45;
+      --accent-deep: #cb5330;
+      --accent-soft: rgba(243, 111, 69, 0.14);
+      --sage: #7d8f68;
+      --sage-soft: rgba(125, 143, 104, 0.16);
+      --gold: #c9a14a;
+      --danger: #b14a3e;
+      --shadow: 0 20px 60px rgba(80, 49, 33, 0.12);
+      --radius-xl: 30px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --radius-sm: 14px;
     }
 
     * {
       box-sizing: border-box;
     }
 
-    body {
-      margin: 0;
-      font-family: "Segoe UI", "Apple SD Gothic Neo", sans-serif;
-      color: var(--ink);
-      background:
-        radial-gradient(circle at top left, rgba(181, 93, 61, 0.16), transparent 28%),
-        radial-gradient(circle at bottom right, rgba(114, 141, 109, 0.18), transparent 24%),
-        linear-gradient(180deg, #f8f3ec 0%, var(--bg) 100%);
-      min-height: 100vh;
-      padding: 32px 16px;
+    html {
+      scroll-behavior: smooth;
     }
 
-    .app {
-      max-width: 920px;
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "SUIT Variable", "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(243, 111, 69, 0.2), transparent 28%),
+        radial-gradient(circle at top right, rgba(125, 143, 104, 0.2), transparent 24%),
+        linear-gradient(180deg, #fffaf4 0%, var(--bg) 48%, #f7f1e7 100%);
+      padding: 24px 14px 48px;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .shell {
+      max-width: 1160px;
       margin: 0 auto;
-      background: rgba(255, 250, 243, 0.92);
-      border: 1px solid rgba(227, 212, 198, 0.8);
-      border-radius: 28px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      backdrop-filter: blur(8px);
     }
 
     .hero {
-      padding: 32px;
-      background: linear-gradient(135deg, rgba(181, 93, 61, 0.12), rgba(255, 255, 255, 0.12));
-      border-bottom: 1px solid var(--line);
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.64), rgba(255, 245, 238, 0.88)),
+        linear-gradient(135deg, rgba(243, 111, 69, 0.12), rgba(125, 143, 104, 0.12));
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: 36px;
+      box-shadow: var(--shadow);
+      padding: 34px;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -40px -50px auto;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(243, 111, 69, 0.22), transparent 66%);
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      background: rgba(255, 255, 255, 0.74);
+      border: 1px solid rgba(255, 255, 255, 0.86);
+      color: var(--accent-deep);
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      line-height: 1.12;
     }
 
     .hero h1 {
-      margin: 0 0 10px;
-      font-size: clamp(2rem, 4vw, 3rem);
-      line-height: 1.1;
+      margin-top: 16px;
+      font-size: clamp(2.2rem, 4.6vw, 4rem);
+      letter-spacing: -0.04em;
+      line-height: 1.14;
+      text-wrap: pretty;
+      word-break: keep-all;
+      overflow-wrap: normal;
     }
 
     .hero p {
-      margin: 0;
+      margin: 16px 0 0;
       max-width: 680px;
       color: var(--muted);
-      line-height: 1.6;
+      font-size: 0.98rem;
+      line-height: 1.66;
+      text-wrap: pretty;
+      word-break: keep-all;
+      overflow-wrap: normal;
     }
 
-    .content {
+    .hero-notes {
       display: grid;
-      grid-template-columns: 1.25fr 0.9fr;
-      gap: 24px;
-      padding: 24px;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .highlight-card {
+      background: rgba(255, 250, 244, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.86);
+      border-radius: 24px;
+      padding: 18px;
+      backdrop-filter: blur(10px);
+    }
+
+    .highlight-card strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+
+    .highlight-card span {
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 0.95rem;
+      word-break: keep-all;
+      overflow-wrap: normal;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.18fr 0.82fr;
+      gap: 22px;
+      margin-top: 22px;
+      align-items: start;
+    }
+
+    .stack {
+      display: grid;
+      gap: 22px;
+      align-content: start;
     }
 
     .panel {
       background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      padding: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      backdrop-filter: blur(12px);
+      align-self: start;
     }
 
-    .panel h2 {
-      margin: 0 0 8px;
-      font-size: 1.2rem;
-    }
-
-    .panel p {
-      margin: 0 0 18px;
-      color: var(--muted);
-      line-height: 1.55;
-    }
-
-    .yarn-list {
-      display: grid;
-      gap: 12px;
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 14px;
       margin-bottom: 18px;
     }
 
-    .row {
+    .panel-head p,
+    .helper {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 0.95rem;
+      word-break: keep-all;
+      overflow-wrap: normal;
+    }
+
+    .helper {
+      margin-top: 0;
+    }
+
+    .panel h2 {
+      font-size: 1.34rem;
+      letter-spacing: -0.03em;
+      text-wrap: balance;
+    }
+
+    .panel h3 {
+      font-size: 0.98rem;
+      letter-spacing: -0.02em;
+    }
+
+    .profile-grid,
+    .note-grid {
       display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 10px;
-      align-items: end;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
     }
 
     .field label {
-      display: block;
-      margin-bottom: 6px;
       font-size: 0.92rem;
       color: var(--muted);
+      font-weight: 600;
     }
 
-    .field input {
+    .field input,
+    .field textarea {
       width: 100%;
-      padding: 13px 14px;
       border: 1px solid var(--line);
-      border-radius: 14px;
-      font-size: 1rem;
+      border-radius: var(--radius-sm);
+      padding: 14px 15px;
+      background: rgba(255, 255, 255, 0.88);
       color: var(--ink);
-      background: #fff;
+      font: inherit;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
     }
 
-    .field input:focus {
-      outline: 2px solid rgba(181, 93, 61, 0.22);
-      border-color: var(--accent);
+    .field textarea {
+      min-height: 120px;
+      resize: vertical;
+      line-height: 1.55;
+    }
+
+    .field input:focus,
+    .field textarea:focus {
+      outline: none;
+      border-color: rgba(243, 111, 69, 0.52);
+      box-shadow: 0 0 0 4px rgba(243, 111, 69, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
     }
 
     button {
       border: 0;
-      border-radius: 14px;
-      padding: 12px 16px;
-      font-size: 0.95rem;
-      font-weight: 600;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font: inherit;
+      font-weight: 700;
       cursor: pointer;
-      transition: transform 0.14s ease, background 0.14s ease, opacity 0.14s ease;
+      transition: transform 0.14s ease, opacity 0.14s ease, background 0.14s ease;
     }
 
     button:hover {
@@ -137,289 +283,2049 @@
     }
 
     .primary {
-      background: var(--accent);
-      color: #fff8f4;
-    }
-
-    .primary:hover {
-      background: var(--accent-strong);
+      background: linear-gradient(135deg, var(--accent), #ff8d67);
+      color: #fffaf5;
     }
 
     .secondary {
-      background: #efe3d7;
-      color: var(--ink);
+      background: rgba(125, 143, 104, 0.14);
+      color: #445036;
     }
 
     .ghost {
-      background: transparent;
+      background: rgba(255, 255, 255, 0.72);
       color: var(--muted);
       border: 1px solid var(--line);
-      padding-inline: 12px;
     }
 
-    .actions {
+    .status-bar {
       display: flex;
-      gap: 10px;
       flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
     }
 
-    .result-card {
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.86);
+    }
+
+    .today-board {
       display: grid;
       gap: 16px;
     }
 
-    .result-main {
-      background: linear-gradient(145deg, #fff, #f9f1e8);
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      padding: 18px;
+    .today-main {
+      padding: 22px;
+      border-radius: 26px;
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 244, 236, 0.92)),
+        linear-gradient(135deg, rgba(243, 111, 69, 0.1), rgba(125, 143, 104, 0.08));
+      border: 1px solid rgba(255, 255, 255, 0.9);
     }
 
-    .eyebrow {
-      margin: 0 0 8px;
-      color: var(--muted);
-      font-size: 0.9rem;
+    .today-main strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: clamp(1.28rem, 2.5vw, 1.9rem);
+      letter-spacing: -0.03em;
+      line-height: 1.24;
+      text-wrap: pretty;
+      word-break: keep-all;
+      overflow-wrap: normal;
     }
 
-    .result-value {
+    .today-main p {
       margin: 0;
-      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      color: var(--muted);
+      line-height: 1.7;
+      word-break: keep-all;
+      overflow-wrap: normal;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .mini-card {
+      padding: 16px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.84);
+    }
+
+    .mini-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-bottom: 8px;
+    }
+
+    .mini-card strong {
+      display: block;
+      font-size: 1rem;
+      line-height: 1.32;
+      text-wrap: pretty;
+      word-break: keep-all;
+      overflow-wrap: normal;
+    }
+
+    .checklist {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .meal-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .meal-card {
+      padding: 18px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.74);
+      border: 1px solid rgba(255, 255, 255, 0.84);
+    }
+
+    .meal-toggle {
+      display: flex;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .meal-toggle input {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      accent-color: var(--accent);
+      flex: none;
+    }
+
+    .meal-card strong,
+    .food-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1rem;
+    }
+
+    .meal-time {
+      display: inline-flex;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(243, 111, 69, 0.1);
+      color: #a84f35;
+      font-size: 0.84rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .meal-card p,
+    .food-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.58;
+      word-break: keep-all;
+      overflow-wrap: normal;
+    }
+
+    .meal-card .time-row {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .meal-card .time-field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .meal-card .time-field span {
+      color: var(--muted);
+      font-size: 0.86rem;
       font-weight: 700;
     }
 
-    .formula,
-    .notes {
-      border: 1px dashed var(--line);
-      border-radius: 18px;
-      padding: 16px;
-      background: rgba(255, 255, 255, 0.62);
+    .meal-card .time-field input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px 13px;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--ink);
+      font: inherit;
     }
 
-    .formula code {
-      display: block;
-      white-space: pre-wrap;
-      font-family: Consolas, monospace;
-      font-size: 0.95rem;
+    .meal-card .time-field input:focus {
+      outline: none;
+      border-color: rgba(243, 111, 69, 0.52);
+      box-shadow: 0 0 0 4px rgba(243, 111, 69, 0.12);
+    }
+
+    .meal-foods {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px dashed rgba(132, 107, 92, 0.18);
+    }
+
+    .meal-foods ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 0.92rem;
       line-height: 1.6;
-      color: #533e34;
     }
 
-    .notes ul {
+    .supplement-grid {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .supplement-card {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.84);
+    }
+
+    .supplement-card .timing {
+      display: inline-flex;
+      margin-bottom: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(125, 143, 104, 0.14);
+      color: #4f5f3f;
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .supplement-card p {
       margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.58;
+      word-break: keep-all;
+      overflow-wrap: normal;
+    }
+
+    .tracker-card {
+      padding: 18px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.74);
+      border: 1px solid rgba(255, 255, 255, 0.84);
+      margin-top: 18px;
+    }
+
+    .tracker-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .tracker-value {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .tracker-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .tracker-note {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.55;
+      word-break: keep-all;
+      overflow-wrap: normal;
+    }
+
+    .calendar-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .calendar-nav {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .calendar-month {
+      font-size: 1.06rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .calendar-weekdays,
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .calendar-weekdays {
+      margin-bottom: 8px;
+    }
+
+    .calendar-weekdays span {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .calendar-cell {
+      min-height: 78px;
+      padding: 10px 8px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.84);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .calendar-cell.outside {
+      opacity: 0.38;
+    }
+
+    .calendar-cell.today {
+      border-color: rgba(243, 111, 69, 0.45);
+      background: linear-gradient(145deg, rgba(255, 249, 243, 0.98), rgba(255, 238, 228, 0.96));
+    }
+
+    .calendar-cell.start-day {
+      box-shadow: inset 0 0 0 2px rgba(125, 143, 104, 0.26);
+    }
+
+    .calendar-day {
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .calendar-week-label {
+      display: inline-flex;
+      align-self: start;
+      padding: 4px 6px;
+      border-radius: 999px;
+      background: rgba(243, 111, 69, 0.12);
+      color: #a84f35;
+      font-size: 0.72rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .calendar-dots {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-top: auto;
+    }
+
+    .calendar-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(243, 111, 69, 0.28);
+    }
+
+    .calendar-dot.logged {
+      background: rgba(243, 111, 69, 0.88);
+    }
+
+    .calendar-dot.meal {
+      background: rgba(125, 143, 104, 0.88);
+    }
+
+    .calendar-dot.weight {
+      background: rgba(201, 161, 74, 0.92);
+    }
+
+    .calendar-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .calendar-legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .check-item {
+      display: flex;
+      gap: 12px;
+      align-items: start;
+      padding: 15px 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.74);
+      border: 1px solid rgba(255, 255, 255, 0.84);
+    }
+
+    .check-item input {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      accent-color: var(--accent);
+      flex: none;
+    }
+
+    .check-item strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.98rem;
+    }
+
+    .check-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .week-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .week-card {
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.86);
+      background: rgba(255, 255, 255, 0.76);
+      transition: transform 0.16s ease, border-color 0.16s ease;
+    }
+
+    .week-card.active {
+      border-color: rgba(243, 111, 69, 0.5);
+      background: linear-gradient(145deg, rgba(255, 249, 243, 0.98), rgba(255, 238, 228, 0.96));
+      transform: translateY(-2px);
+    }
+
+    .week-card header {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .week-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.62;
+      font-size: 0.94rem;
+      word-break: keep-all;
+      overflow-wrap: normal;
+    }
+
+    .week-card header .pill {
+      justify-self: start;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(243, 111, 69, 0.1);
+      color: #a84f35;
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .chip.sage {
+      background: var(--sage-soft);
+      color: #4f5f3f;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .stat-card {
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.84);
+    }
+
+    .stat-card span {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .stat-card strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 1.35rem;
+      letter-spacing: -0.03em;
+    }
+
+    .history-list,
+    .safety-list,
+    .source-list,
+    .food-grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .history-item,
+    .safety-item,
+    .source-item {
+      padding: 15px 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.84);
+    }
+
+    .history-item strong,
+    .safety-item strong,
+    .source-item strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.98rem;
+    }
+
+    .history-item span,
+    .safety-item span,
+    .source-item span {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.55;
+      word-break: keep-all;
+      overflow-wrap: normal;
+    }
+
+    .history-item .note-line {
+      display: block;
+      margin-top: 6px;
+    }
+
+    .source-item a {
+      color: var(--accent-deep);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .food-card {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.84);
+    }
+
+    .food-card ul {
+      margin: 10px 0 0;
       padding-left: 18px;
       color: var(--muted);
       line-height: 1.6;
+      font-size: 0.92rem;
+      word-break: keep-all;
+      overflow-wrap: normal;
     }
 
-    .error {
-      margin-top: 10px;
-      color: #b3342c;
+    .empty {
+      color: var(--muted);
+      font-size: 0.94rem;
+      margin: 10px 0 0;
+      line-height: 1.6;
+    }
+
+    .banner {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(125, 143, 104, 0.16), rgba(255, 255, 255, 0.76));
+      color: #48553a;
       font-weight: 600;
-      min-height: 1.4em;
+      line-height: 1.6;
+    }
+
+    .footer {
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media (max-width: 760px) {
-      .content {
-        grid-template-columns: 1fr;
+      body {
+        padding: 14px 10px 36px;
       }
 
       .hero,
-      .content {
-        padding: 18px;
+      .panel {
+        padding: 20px;
+        border-radius: 26px;
       }
 
-      .row {
+      .profile-grid,
+      .note-grid,
+      .mini-grid,
+      .stats,
+      .meal-grid {
         grid-template-columns: 1fr;
+      }
+
+      .calendar-cell {
+        min-height: 68px;
+      }
+
+      .panel-head {
+        flex-direction: column;
+      }
+
+      .hero h1 {
+        font-size: clamp(2rem, 10vw, 3rem);
       }
     }
   </style>
 </head>
 <body>
-  <main class="app">
+  <div class="shell">
     <section class="hero">
-      <h1>합사 번수 계산기</h1>
-      <p>
-        서로 다른 실을 여러 가닥 합쳤을 때의 최종 번수를 계산합니다.
-        공식은 <strong>1 / 최종 번수 = 1/N1 + 1/N2 + ...</strong> 를 사용하며,
-        결과는 참고용이므로 실제 뜨개 전에는 게이지 스와치를 함께 확인하는 것이 좋아요.
-      </p>
-    </section>
-
-    <section class="content">
-      <section class="panel">
-        <h2>실 정보 입력</h2>
-        <p>각 가닥의 번수를 입력하세요. 같은 실을 3합, 4합으로 쓰는 경우도 한 줄씩 추가하면 됩니다.</p>
-
-        <div class="yarn-list" id="yarn-list"></div>
-
-        <div class="actions">
-          <button class="secondary" id="add-row" type="button">가닥 추가</button>
-          <button class="primary" id="calculate" type="button">계산하기</button>
-          <button class="ghost" id="reset" type="button">초기화</button>
+      <div class="hero-grid">
+        <div>
+          <span class="eyebrow">SWITCH-ON DIET COMPANION</span>
+          <h1>스위치온 다이어트를 더 쉽게 이어가는 개인용 웹앱</h1>
+          <p>
+            시작일만 정하면 오늘이 몇 주차인지, 어떤 식사 원칙을 지켜야 하는지,
+            물과 수면, 공복, 운동 체크까지 한 화면에서 확인할 수 있게 만들었습니다.
+            아이폰에서는 Safari로 연 뒤 홈 화면에 추가하면 작은 앱처럼 바로 쓸 수 있습니다.
+          </p>
+          <div class="status-bar">
+            <span class="pill">4주 루틴 안내</span>
+            <span class="pill">오늘 체크리스트</span>
+            <span class="pill">몸무게·메모 저장</span>
+          </div>
         </div>
 
-        <p class="error" id="error"></p>
+        <div class="hero-notes">
+          <div class="highlight-card">
+            <strong>핵심 구조</strong>
+            <span>1주차 적응, 2주차 단식 도입, 3주차 대사 유연성 회복, 4주차 유지 습관화 흐름으로 정리했습니다.</span>
+          </div>
+          <div class="highlight-card">
+            <strong>아이폰 사용 팁</strong>
+            <span>Safari 하단 공유 버튼을 눌러 “홈 화면에 추가”를 선택하면 앱처럼 빠르게 열 수 있어요.</span>
+          </div>
+          <div class="highlight-card">
+            <strong>주의</strong>
+            <span>어지럼, 심한 두통, 저혈당 느낌, 피부 발진처럼 이상 반응이 크면 멈추고 전문가와 상의하는 쪽이 안전합니다.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <main class="grid">
+      <section class="stack">
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>내 설정</h2>
+              <p>시작일을 기준으로 오늘 단계와 체크리스트가 바뀝니다. 값은 이 기기 브라우저에 저장됩니다.</p>
+            </div>
+          </div>
+
+          <div class="profile-grid">
+            <div class="field">
+              <label for="startDate">시작일</label>
+              <input id="startDate" type="date" />
+            </div>
+            <div class="field">
+              <label for="startWeight">시작 체중 (kg)</label>
+              <input id="startWeight" type="number" step="0.1" min="0" placeholder="예: 66.0" />
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="primary" id="saveProfile" type="button">설정 저장</button>
+            <button class="secondary" id="jumpToday" type="button">오늘 루틴 보기</button>
+          </div>
+
+          <div class="banner" id="profileFeedback">
+            시작일을 입력하면 오늘 기준 주차와 해야 할 일이 자동으로 정리됩니다.
+          </div>
+        </section>
+
+        <section class="panel" id="todaySection">
+          <div class="panel-head">
+            <div>
+              <h2>오늘의 루틴</h2>
+              <p>스위치온 흐름을 따라 오늘 우선순위를 바로 확인하세요.</p>
+            </div>
+            <span class="pill" id="todayBadge">준비 중</span>
+          </div>
+
+          <div class="today-board">
+            <div class="today-main">
+              <strong id="todayHeadline">시작일을 먼저 입력해 주세요.</strong>
+              <p id="todaySummary">설정을 저장하면 오늘이 1~4주차 중 어디인지와 집중할 포인트가 여기에 표시됩니다.</p>
+            </div>
+
+            <div class="mini-grid">
+              <div class="mini-card">
+                <span>현재 단계</span>
+                <strong id="miniStage">-</strong>
+              </div>
+              <div class="mini-card">
+                <span>오늘 포인트</span>
+                <strong id="miniFocus">-</strong>
+              </div>
+              <div class="mini-card">
+                <span>권장 리듬</span>
+                <strong id="miniRhythm">-</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-head" style="margin-top: 18px;">
+            <div>
+              <h3>식사 체크</h3>
+              <p>아침, 점심, 오후 간식, 저녁을 각각 따로 체크하고 권장 시간대에 맞춰 보세요.</p>
+            </div>
+          </div>
+
+          <div class="meal-grid" id="mealGrid"></div>
+
+          <div class="panel-head" style="margin-top: 18px;">
+            <div>
+              <h3>공복 시간 계산</h3>
+              <p>전날 마지막 식사 기록과 오늘 첫 식사 기록을 기준으로 추정 공복 시간을 계산합니다.</p>
+            </div>
+          </div>
+
+          <div class="stats">
+            <div class="stat-card">
+              <span>오늘 첫 섭취</span>
+              <strong id="firstMealTime">-</strong>
+            </div>
+            <div class="stat-card">
+              <span>전날 마지막 섭취</span>
+              <strong id="previousMealTime">-</strong>
+            </div>
+            <div class="stat-card">
+              <span>추정 공복 시간</span>
+              <strong id="fastingDuration">-</strong>
+            </div>
+          </div>
+
+          <p class="helper" id="fastingNote">식사 시간을 입력하면 여기서 공복 시간을 바로 확인할 수 있습니다.</p>
+
+          <div class="tracker-card">
+            <div class="tracker-head">
+              <div>
+                <h3>이번 주 운동 횟수</h3>
+                <p class="helper" id="exerciseWeekLabel">이번 주 범위를 불러오는 중입니다.</p>
+              </div>
+              <div class="tracker-value" id="exerciseCount">0회</div>
+            </div>
+            <p class="tracker-note" id="exerciseSummary">주가 끝날 때 몇 번 했는지 확인하면서 숫자만 맞춰 주세요. 매일 체크하는 방식보다 덜 번거롭게 쓸 수 있습니다.</p>
+            <div class="tracker-actions">
+              <button class="ghost" id="exerciseMinus" type="button">-1회</button>
+              <button class="secondary" id="exercisePlus" type="button">+1회</button>
+            </div>
+          </div>
+
+          <div class="checklist" id="checklist"></div>
+          <p class="empty" id="checklistEmpty">체크리스트가 준비되면 여기에 표시됩니다.</p>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>기록</h2>
+              <p>몸무게, 컨디션, 메모를 남겨서 내 몸 반응을 같이 보세요.</p>
+            </div>
+          </div>
+
+          <div class="note-grid">
+            <div class="field">
+              <label for="currentWeight">오늘 체중 (kg)</label>
+              <input id="currentWeight" type="number" step="0.1" min="0" placeholder="예: 63.4" />
+            </div>
+            <div class="field">
+              <label for="energy">오늘 컨디션 한 줄</label>
+              <input id="energy" type="text" placeholder="예: 오후에 살짝 피곤함" />
+            </div>
+          </div>
+
+          <div class="field" style="margin-top: 14px;">
+            <label for="memo">오늘 메모</label>
+            <textarea id="memo" placeholder="식단, 공복 시간, 운동, 힘들었던 점 등을 자유롭게 적어 보세요."></textarea>
+          </div>
+
+          <div class="actions">
+            <button class="primary" id="saveLog" type="button">오늘 기록 저장</button>
+            <button class="ghost" id="fillToday" type="button">설정값으로 채우기</button>
+          </div>
+
+          <div class="stats">
+            <div class="stat-card">
+              <span>최근 체중</span>
+              <strong id="latestWeight">-</strong>
+            </div>
+            <div class="stat-card">
+              <span>시작 대비</span>
+              <strong id="weightChange">-</strong>
+            </div>
+            <div class="stat-card">
+              <span>기록 일수</span>
+              <strong id="logDays">0일</strong>
+            </div>
+          </div>
+
+          <div class="history-list" id="historyList"></div>
+          <p class="empty" id="historyEmpty">아직 저장된 기록이 없습니다. 오늘 기록부터 시작해 보세요.</p>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>주의 작업</h2>
+              <p>실수로 누르지 않도록 초기화는 가장 아래에서만 할 수 있게 옮겼습니다.</p>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="ghost" id="resetAll" type="button">기록 초기화</button>
+          </div>
+        </section>
+
       </section>
 
-      <aside class="panel">
-        <h2>계산 결과</h2>
-        <div class="result-card">
-          <div class="result-main">
-            <p class="eyebrow">예상 최종 번수</p>
-            <p class="result-value" id="result-value">-</p>
+      <aside class="stack">
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>이번 달 캘린더</h2>
+              <p>기록한 날짜와 시작일 기준 주차를 오른쪽에서 바로 확인할 수 있게 옮겼습니다.</p>
+            </div>
           </div>
 
-          <div class="formula">
-            <p class="eyebrow">적용 공식</p>
-            <code id="formula-text">값을 입력하면 계산식이 여기에 표시됩니다.</code>
+          <div class="calendar-head">
+            <div class="calendar-month" id="calendarMonthLabel">-</div>
+            <div class="calendar-nav">
+              <button class="ghost" id="calendarPrev" type="button">이전</button>
+              <button class="ghost" id="calendarNext" type="button">다음</button>
+            </div>
           </div>
 
-          <div class="notes">
-            <p class="eyebrow">실전 메모</p>
-            <ul>
-              <li>숫자가 작을수록 더 굵은 실입니다.</li>
-              <li>같은 번수 여러 가닥은 사실상 `번수 ÷ 가닥 수`와 같은 결과가 납니다.</li>
-              <li>재질, 꼬임, 탄성 차이 때문에 최종 느낌은 게이지가 가장 중요합니다.</li>
-            </ul>
+          <div class="calendar-weekdays">
+            <span>월</span>
+            <span>화</span>
+            <span>수</span>
+            <span>목</span>
+            <span>금</span>
+            <span>토</span>
+            <span>일</span>
           </div>
-        </div>
+
+          <div class="calendar-grid" id="calendarGrid"></div>
+
+          <div class="calendar-legend">
+            <span><i class="calendar-dot logged"></i> 기록 있음</span>
+            <span><i class="calendar-dot meal"></i> 식사 시간 입력</span>
+            <span><i class="calendar-dot weight"></i> 체중 입력</span>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>4주 로드맵</h2>
+              <p>링크 내용을 앱에서 바로 따라가기 쉽게 요약했습니다.</p>
+            </div>
+          </div>
+
+          <div class="week-list" id="weekList"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>부작용 체크</h2>
+              <p>특히 초반 적응기에는 무리하지 않는 것이 중요합니다.</p>
+            </div>
+          </div>
+
+          <div class="safety-list">
+            <div class="safety-item">
+              <strong>어지럼·두통</strong>
+              <span>갑작스러운 탄수화물 제한과 공복 적응 과정에서 흔히 나타날 수 있습니다. 심하면 일정을 늦추거나 중단하세요.</span>
+            </div>
+            <div class="safety-item">
+              <strong>피로감·저혈당 느낌</strong>
+              <span>업무나 일상에 지장이 클 정도면 버티기보다 안전을 우선하는 편이 좋습니다.</span>
+            </div>
+            <div class="safety-item">
+              <strong>피부 발진 또는 이상 반응</strong>
+              <span>몸 상태 변화가 과하다고 느껴지면 계속 밀어붙이지 말고 전문가 상담을 고려하세요.</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>허용음식 정리</h2>
+              <p>주차가 올라갈수록 먹을 수 있는 범위가 넓어집니다. 눈에 띄게 보이도록 묶어서 정리했습니다.</p>
+            </div>
+          </div>
+
+          <div class="food-grid">
+            <div class="food-card">
+              <strong>1주차 초반 기본 허용</strong>
+              <p>가장 타이트하게 가는 구간입니다.</p>
+              <ul>
+                <li>단백질 쉐이크</li>
+                <li>녹황색 채소</li>
+                <li>두부</li>
+                <li>코코넛오일</li>
+                <li>무가당 요거트</li>
+              </ul>
+            </div>
+            <div class="food-card">
+              <strong>1주차 후반~2주차 확장</strong>
+              <p>점심 저탄수 식사와 일반식 2끼가 들어오기 시작합니다.</p>
+              <ul>
+                <li>잡곡밥 반 공기</li>
+                <li>생선</li>
+                <li>닭고기(껍질 제외)</li>
+                <li>해조류</li>
+                <li>콩류, 견과류, 치즈, 우유</li>
+                <li>오전 블랙커피 1잔</li>
+              </ul>
+            </div>
+            <div class="food-card">
+              <strong>3주차 이후 추가 허용</strong>
+              <p>운동량과 회복 상태를 보며 조금 더 유연하게 갑니다.</p>
+              <ul>
+                <li>단호박</li>
+                <li>토마토</li>
+                <li>바나나</li>
+                <li>베리류</li>
+                <li>고강도 운동 시 고구마</li>
+                <li>4주차부터 과일 하루 1개</li>
+              </ul>
+            </div>
+            <div class="food-card">
+              <strong>피해야 할 음식</strong>
+              <p>체중 감량보다도 루틴 유지가 흔들리기 쉬운 항목들입니다.</p>
+              <ul>
+                <li>설탕류, 청량음료, 과자, 아이스크림, 주스</li>
+                <li>당분 첨가 우유, 두유</li>
+                <li>밀가루 음식: 빵, 라면, 파스타</li>
+                <li>술 전반</li>
+                <li>고포화지방 음식: 삼겹살, 갈비, 곱창</li>
+                <li>트랜스지방 음식, 지나치게 짠 음식</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>영양제 타이밍</h2>
+              <p>제품 라벨을 우선하되, 많이 쓰는 패턴 기준으로 보기 쉽게 정리했습니다.</p>
+            </div>
+          </div>
+
+          <div class="supplement-grid">
+            <div class="supplement-card">
+              <strong>유산균</strong>
+              <span class="timing">아침 공복 또는 첫 식사 전</span>
+              <p>제품마다 균주와 코팅 방식이 달라 타이밍이 완전히 같지는 않습니다. 아침에 같은 시간대로 고정해 두고, 라벨에 별도 지시가 있으면 그 안내를 우선하세요.</p>
+            </div>
+            <div class="supplement-card">
+              <strong>종합비타민</strong>
+              <span class="timing">아침 또는 점심 식후</span>
+              <p>매일 같은 시간에 먹는 쪽이 좋고, 속이 예민하면 식후가 더 무난합니다. 공복에 먹고 메스꺼움이 있으면 식사 직후로 옮기는 편이 낫습니다.</p>
+            </div>
+            <div class="supplement-card">
+              <strong>오메가3</strong>
+              <span class="timing">점심 또는 저녁 식사와 함께</span>
+              <p>기름기 있는 식사와 같이 먹는 편이 보통 더 편하고, 제품에 따라 음식과 함께 복용하도록 안내되기도 합니다. 혈액응고 관련 약을 먹는 경우에는 전문가와 먼저 상의하세요.</p>
+            </div>
+            <div class="supplement-card">
+              <strong>비타민 C</strong>
+              <span class="timing">아침 또는 점심 식후</span>
+              <p>속이 예민하면 공복보다 식후가 더 무난합니다. 나눠 먹는 제품이라면 아침과 점심으로 나누는 방식도 괜찮습니다.</p>
+            </div>
+            <div class="supplement-card">
+              <strong>CoQ10</strong>
+              <span class="timing">아침 또는 점심 식사와 함께</span>
+              <p>지용성이라 식사와 같이 먹는 쪽이 대체로 편합니다. 늦은 시간에 먹으면 예민한 사람은 잠에 영향을 느낄 수 있어 낮 시간대가 무난합니다.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>참고 링크</h2>
+              <p>원문도 함께 보면서 나에게 맞게 조절할 수 있습니다.</p>
+            </div>
+          </div>
+
+          <div class="source-list">
+            <div class="source-item">
+              <strong>스위치온 다이어트 나무위키</strong>
+              <span><a href="https://namu.wiki/w/%EC%8A%A4%EC%9C%84%EC%B9%98%EC%98%A8%20%EB%8B%A4%EC%9D%B4%EC%96%B4%ED%8A%B8" target="_blank" rel="noreferrer">원문 열기</a></span>
+            </div>
+            <div class="source-item">
+              <strong>이랜드 매거진 정리 글</strong>
+              <span><a href="https://www.eland.co.kr/mgzn/viewMgzn?mgznIdx=1077" target="_blank" rel="noreferrer">원문 열기</a></span>
+            </div>
+          </div>
+        </section>
       </aside>
-    </section>
-  </main>
+    </main>
+
+    <p class="footer">
+      이 웹앱은 개인 실천을 돕기 위한 정리 도구입니다. 의료 진단이나 치료를 대신하지 않습니다.
+    </p>
+  </div>
 
   <script>
-    const yarnList = document.getElementById("yarn-list");
-    const addRowButton = document.getElementById("add-row");
-    const calculateButton = document.getElementById("calculate");
-    const resetButton = document.getElementById("reset");
-    const resultValue = document.getElementById("result-value");
-    const formulaText = document.getElementById("formula-text");
-    const errorText = document.getElementById("error");
+    const STORAGE_KEY = "switchon-diet-companion-v1";
 
-    let rowCount = 0;
+    const plans = [
+      {
+        key: "week1",
+        title: "1주차",
+        period: "1~7일",
+        focus: "적응과 전환",
+        rhythm: "첫 3일은 강하게, 이후는 점심 보완",
+        summary: "몸을 다이어트 모드로 돌리는 시기입니다. 초반에는 단백질 쉐이크 중심으로 가볍게 가고, 4일차부터는 점심 저탄수 식사를 더합니다.",
+        chips: ["1~3일 쉐이크 4회", "4~7일 쉐이크 3회", "점심 저탄수 식사", "녹황색 채소·두부·무가당 요거트"],
+      },
+      {
+        key: "week2",
+        title: "2주차",
+        period: "8~14일",
+        focus: "단식 도입",
+        rhythm: "주 1회 24시간 단식",
+        summary: "체지방 감량이 본격화되는 구간입니다. 하루 2번 쉐이크와 일반식 2끼로 가며, 주 1회 24시간 단식을 넣습니다.",
+        chips: ["주 1회 24시간 단식", "쉐이크 2회 + 일반식 2끼", "저녁 저탄수", "오전 블랙커피 1잔 가능"],
+      },
+      {
+        key: "week3",
+        title: "3주차",
+        period: "15~21일",
+        focus: "대사 유연성 회복",
+        rhythm: "주 2회 단식, 연속 금지",
+        summary: "단식 횟수가 늘어나지만 연속 단식은 피합니다. 단식 후 고단백 식사를 챙기고, 운동량이 많으면 바나나나 고구마로 보완할 수 있습니다.",
+        chips: ["주 2회 24시간 단식", "연속 단식 금지", "고단백 회복식", "단호박·토마토·바나나·베리 허용"],
+      },
+      {
+        key: "week4",
+        title: "4주차",
+        period: "22~28일",
+        focus: "유지 습관화",
+        rhythm: "주 3회 단식, 사이 일반식 필수",
+        summary: "마지막 주는 새 식습관을 굳히는 단계입니다. 점심과 저녁은 계속 저탄수로 관리하고, 단식일 사이에 일반식을 넣어 균형을 맞춥니다.",
+        chips: ["주 3회 24시간 단식", "과일 하루 1개", "점심·저녁 저탄수", "단식일 사이 일반식 필수"],
+      },
+      {
+        key: "maintenance",
+        title: "유지기",
+        period: "29일 이후",
+        focus: "지속 가능성",
+        rhythm: "14시간 공복 + 주 1~2회 24시간 단식",
+        summary: "4주가 지나면 일반식을 천천히 넓히되, 공복 시간과 식습관 리듬은 유지하는 흐름으로 가는 것이 좋습니다.",
+        chips: ["14시간 공복 유지", "주 1~2회 24시간 단식", "점진적 일반식 복귀", "요요 방지 루틴"],
+      }
+    ];
 
-    function createRow(value = "") {
-      rowCount += 1;
+    const coreChecklist = [
+      { id: "water", title: "물 2L 마시기", hint: "하루 물 2L를 채웠는지 체크하세요." },
+      { id: "sleep", title: "수면 확보", hint: "자정~오전 4시를 포함해 최소 6시간 수면을 목표로 합니다." },
+      { id: "supplement-probiotic", title: "유산균", hint: "아침 공복 또는 첫 식사 전에 챙겼는지 확인합니다." },
+      { id: "supplement-multivitamin", title: "종합비타민", hint: "아침 또는 점심 식후에 챙겼는지 확인합니다." },
+      { id: "supplement-omega3", title: "오메가3", hint: "점심 또는 저녁 식사와 함께 챙겼는지 확인합니다." },
+      { id: "supplement-vitamin-c", title: "비타민 C", hint: "아침 또는 점심 식후에 챙겼는지 확인합니다." },
+      { id: "supplement-coq10", title: "CoQ10", hint: "아침 또는 점심 식사와 함께 챙겼는지 확인합니다." }
+    ];
 
-      const row = document.createElement("div");
-      row.className = "row";
-      row.dataset.rowId = String(rowCount);
+    const mealChecklist = [
+      {
+        key: "breakfast",
+        id: "meal-breakfast",
+        title: "아침",
+        time: "07:00-09:00"
+      },
+      {
+        key: "lunch",
+        id: "meal-lunch",
+        title: "점심",
+        time: "12:00-13:30"
+      },
+      {
+        key: "snack",
+        id: "meal-snack",
+        title: "오후 간식",
+        time: "15:00-16:30"
+      },
+      {
+        key: "dinner",
+        id: "meal-dinner",
+        title: "저녁",
+        time: "18:00-19:30"
+      }
+    ];
 
-      row.innerHTML = `
-        <div class="field">
-          <label for="count-${rowCount}">실 ${rowCount} 번수</label>
-          <input
-            id="count-${rowCount}"
-            class="count-input"
-            type="number"
-            min="0.0001"
-            step="any"
-            inputmode="decimal"
-            placeholder="예: 20"
-            value="${value}"
-          />
-        </div>
-        <button class="ghost remove-row" type="button">삭제</button>
-      `;
+    const els = {
+      startDate: document.getElementById("startDate"),
+      startWeight: document.getElementById("startWeight"),
+      currentWeight: document.getElementById("currentWeight"),
+      saveProfile: document.getElementById("saveProfile"),
+      jumpToday: document.getElementById("jumpToday"),
+      resetAll: document.getElementById("resetAll"),
+      profileFeedback: document.getElementById("profileFeedback"),
+      todayBadge: document.getElementById("todayBadge"),
+      todayHeadline: document.getElementById("todayHeadline"),
+      todaySummary: document.getElementById("todaySummary"),
+      miniStage: document.getElementById("miniStage"),
+      miniFocus: document.getElementById("miniFocus"),
+      miniRhythm: document.getElementById("miniRhythm"),
+      mealGrid: document.getElementById("mealGrid"),
+      firstMealTime: document.getElementById("firstMealTime"),
+      previousMealTime: document.getElementById("previousMealTime"),
+      fastingDuration: document.getElementById("fastingDuration"),
+      fastingNote: document.getElementById("fastingNote"),
+      exerciseWeekLabel: document.getElementById("exerciseWeekLabel"),
+      exerciseCount: document.getElementById("exerciseCount"),
+      exerciseSummary: document.getElementById("exerciseSummary"),
+      exerciseMinus: document.getElementById("exerciseMinus"),
+      exercisePlus: document.getElementById("exercisePlus"),
+      checklist: document.getElementById("checklist"),
+      checklistEmpty: document.getElementById("checklistEmpty"),
+      weekList: document.getElementById("weekList"),
+      energy: document.getElementById("energy"),
+      memo: document.getElementById("memo"),
+      saveLog: document.getElementById("saveLog"),
+      fillToday: document.getElementById("fillToday"),
+      latestWeight: document.getElementById("latestWeight"),
+      weightChange: document.getElementById("weightChange"),
+      logDays: document.getElementById("logDays"),
+      historyList: document.getElementById("historyList"),
+      historyEmpty: document.getElementById("historyEmpty"),
+      calendarMonthLabel: document.getElementById("calendarMonthLabel"),
+      calendarPrev: document.getElementById("calendarPrev"),
+      calendarNext: document.getElementById("calendarNext"),
+      calendarGrid: document.getElementById("calendarGrid")
+    };
 
-      const removeButton = row.querySelector(".remove-row");
-      removeButton.addEventListener("click", () => {
-        if (yarnList.children.length <= 2) {
-          errorText.textContent = "최소 2가닥은 남겨두어야 계산할 수 있어요.";
-          return;
-        }
+    let state = loadState();
+    let calendarCursor = { year: new Date().getFullYear(), month: new Date().getMonth() };
 
-        row.remove();
-        renumberRows();
-      });
-
-      yarnList.appendChild(row);
+    function loadState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+        return {
+          profile: {
+            startDate: saved.profile?.startDate || formatDate(new Date()),
+            startWeight: saved.profile?.startWeight || "",
+            currentWeight: saved.profile?.currentWeight || ""
+          },
+          logs: saved.logs || {},
+          weeklyExercise: saved.weeklyExercise || {}
+        };
+      } catch (error) {
+        return {
+          profile: {
+            startDate: formatDate(new Date()),
+            startWeight: "",
+            currentWeight: ""
+          },
+          logs: {},
+          weeklyExercise: {}
+        };
+      }
     }
 
-    function renumberRows() {
-      const rows = [...document.querySelectorAll(".row")];
-      rows.forEach((row, index) => {
-        const number = index + 1;
-        const label = row.querySelector("label");
-        const input = row.querySelector("input");
-
-        row.dataset.rowId = String(number);
-        label.setAttribute("for", `count-${number}`);
-        label.textContent = `실 ${number} 번수`;
-        input.id = `count-${number}`;
-      });
-      rowCount = rows.length;
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }
 
-    function getCounts() {
-      return [...document.querySelectorAll(".count-input")]
-        .map((input) => Number(input.value))
-        .filter((value) => !Number.isNaN(value));
+    function formatDate(date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
     }
 
-    function calculateCombinedCount(counts) {
-      const inverseSum = counts.reduce((sum, count) => sum + 1 / count, 0);
-      return 1 / inverseSum;
+    function parseDate(value) {
+      return new Date(`${value}T00:00:00`);
     }
 
-    function formatCount(value) {
-      if (!Number.isFinite(value)) {
+    function daysBetween(startDate, endDate) {
+      const msPerDay = 24 * 60 * 60 * 1000;
+      const start = parseDate(startDate);
+      const end = parseDate(endDate);
+      return Math.floor((end - start) / msPerDay);
+    }
+
+    function getTodayKey() {
+      return formatDate(new Date());
+    }
+
+    function getOrCreateTodayLog() {
+      const key = getTodayKey();
+      if (!state.logs[key]) {
+        state.logs[key] = {
+          checks: {},
+          mealTimes: {
+            breakfast: "",
+            lunch: "",
+            snack: "",
+            dinner: ""
+          },
+          weight: "",
+          energy: "",
+          memo: ""
+        };
+      }
+      if (!state.logs[key].mealTimes) {
+        state.logs[key].mealTimes = {
+          breakfast: "",
+          lunch: "",
+          snack: "",
+          dinner: ""
+        };
+      }
+      return state.logs[key];
+    }
+
+    function createEmptyMealTimes() {
+      return {
+        breakfast: "",
+        lunch: "",
+        snack: "",
+        dinner: ""
+      };
+    }
+
+    function getMealTitle(mealKey) {
+      return mealChecklist.find((meal) => meal.key === mealKey)?.title || mealKey;
+    }
+
+    function timeStringToMinutes(value) {
+      if (!value || !value.includes(":")) {
+        return null;
+      }
+
+      const [hours, minutes] = value.split(":").map(Number);
+      if (Number.isNaN(hours) || Number.isNaN(minutes)) {
+        return null;
+      }
+
+      return hours * 60 + minutes;
+    }
+
+    function minutesToDurationText(value) {
+      if (value === null || value === undefined || value < 0) {
         return "-";
       }
 
-      const rounded = value.toFixed(2);
-      return `${Number(rounded).toLocaleString("ko-KR")}수`;
+      const hours = Math.floor(value / 60);
+      const minutes = value % 60;
+      return minutes ? `${hours}시간 ${minutes}분` : `${hours}시간`;
     }
 
-    function calculate() {
-      errorText.textContent = "";
-      const counts = getCounts();
+    function getOrderedMealTimes(log) {
+      return Object.entries(log?.mealTimes || {})
+        .filter(([, time]) => Boolean(time))
+        .map(([mealKey, time]) => ({ mealKey, time, minutes: timeStringToMinutes(time) }))
+        .filter((entry) => entry.minutes !== null)
+        .sort((a, b) => a.minutes - b.minutes);
+    }
 
-      if (counts.length < 2) {
-        errorText.textContent = "2가닥 이상 입력해야 계산할 수 있어요.";
-        resultValue.textContent = "-";
-        formulaText.textContent = "값을 입력하면 계산식이 여기에 표시됩니다.";
+    function getPreviousDateKey(dateKey) {
+      const base = parseDate(dateKey);
+      base.setDate(base.getDate() - 1);
+      return formatDate(base);
+    }
+
+    function getWeekStartDate(dateKey = getTodayKey()) {
+      const base = parseDate(dateKey);
+      const dayIndex = (base.getDay() + 6) % 7;
+      base.setDate(base.getDate() - dayIndex);
+      return base;
+    }
+
+    function getWeekKey(dateKey = getTodayKey()) {
+      return formatDate(getWeekStartDate(dateKey));
+    }
+
+    function formatShortDate(date) {
+      return `${date.getMonth() + 1}.${date.getDate()}`;
+    }
+
+    function getWeekRangeLabel(dateKey = getTodayKey()) {
+      const start = getWeekStartDate(dateKey);
+      const end = new Date(start);
+      end.setDate(end.getDate() + 6);
+      return `${formatShortDate(start)} - ${formatShortDate(end)}`;
+    }
+
+    function hasLogContent(log) {
+      const hasChecks = Object.values(log?.checks || {}).some(Boolean);
+      const hasMealTimes = Object.values(log?.mealTimes || {}).some(Boolean);
+      return Boolean(log?.weight || log?.energy || log?.memo || hasChecks || hasMealTimes);
+    }
+
+    function getWeekNumberForDate(dateKey) {
+      if (!state.profile.startDate) {
+        return null;
+      }
+
+      const diff = daysBetween(state.profile.startDate, dateKey);
+      if (diff < 0) {
+        return null;
+      }
+
+      if (diff >= 28) {
+        return "유지";
+      }
+
+      return `${Math.floor(diff / 7) + 1}주차`;
+    }
+
+    function getCurrentWeekExerciseCount() {
+      return state.weeklyExercise[getWeekKey()] || 0;
+    }
+
+    function adjustExerciseCount(delta) {
+      const weekKey = getWeekKey();
+      const nextValue = Math.max(0, (state.weeklyExercise[weekKey] || 0) + delta);
+      state.weeklyExercise[weekKey] = nextValue;
+      saveState();
+      renderExerciseTracker();
+      renderCalendar();
+    }
+
+    function getMealGuidance(stageInfo) {
+      if (!stageInfo || stageInfo.status === "before-start") {
+        return {
+          breakfast: {
+            hint: "시작 전에는 아침 시간을 먼저 일정하게 맞추는 연습부터 해 보세요.",
+            foods: ["단백질 쉐이크", "삶은 달걀", "무가당 요거트"]
+          },
+          lunch: {
+            hint: "점심은 단백질과 채소 중심으로 가볍게 정리해 두면 시작이 쉬워집니다.",
+            foods: ["닭가슴살 또는 생선", "샐러드", "잡곡밥 소량"]
+          },
+          snack: {
+            hint: "오후 출출함을 대비해 허용식품 간식을 미리 정해 두세요.",
+            foods: ["무가당 요거트", "두부", "견과류 소량"]
+          },
+          dinner: {
+            hint: "저녁은 과식 대신 단백질과 채소로 가볍게 마무리하는 쪽이 좋습니다.",
+            foods: ["두부", "생선", "녹황색 채소"]
+          }
+        };
+      }
+
+      const day = stageInfo.dayNumber;
+      const week = stageInfo.plan.key;
+
+      if (week === "week1" && day <= 3) {
+        return {
+          breakfast: {
+            hint: "초기 적응기라 아침은 최대한 단순하게 가져갑니다.",
+            foods: ["단백질 쉐이크", "물", "필요하면 블랙커피 대신 물 우선"]
+          },
+          lunch: {
+            hint: "점심도 쉐이크 중심으로 가고, 배고프면 허용식품만 소량 보완합니다.",
+            foods: ["단백질 쉐이크", "녹황색 채소", "두부"]
+          },
+          snack: {
+            hint: "간식은 배고픔을 넘기기 위한 최소 보완 개념으로 생각해 보세요.",
+            foods: ["무가당 요거트", "두부", "오이·샐러리 같은 채소"]
+          },
+          dinner: {
+            hint: "저녁도 가볍게 유지하면서 첫 3일 리듬을 지키는 쪽이 중요합니다.",
+            foods: ["단백질 쉐이크", "녹황색 채소", "코코넛오일 소량"]
+          }
+        };
+      }
+
+      if (week === "week1") {
+        return {
+          breakfast: {
+            hint: "아침은 계속 가볍게 쉐이크 중심으로 시작합니다.",
+            foods: ["단백질 쉐이크", "물", "무가당 요거트 소량"]
+          },
+          lunch: {
+            hint: "점심은 이 시기 핵심 일반식입니다.",
+            foods: ["잡곡밥 반 공기", "생선 또는 닭고기", "녹황색 채소", "해조류"]
+          },
+          snack: {
+            hint: "오후에는 과자 대신 허용식품 안에서만 간단히 보완하세요.",
+            foods: ["두부", "무가당 요거트", "채소 스틱"]
+          },
+          dinner: {
+            hint: "저녁은 다시 가볍게 정리해서 공복 리듬을 준비합니다.",
+            foods: ["단백질 쉐이크", "녹황색 채소", "두부"]
+          }
+        };
+      }
+
+      if (week === "week2") {
+        return {
+          breakfast: {
+            hint: "아침은 단순하게, 이후 식사 리듬을 무너뜨리지 않는 쪽이 좋습니다.",
+            foods: ["단백질 쉐이크", "무가당 요거트", "물"]
+          },
+          lunch: {
+            hint: "점심은 가장 안정적으로 먹기 좋은 일반식 타이밍입니다.",
+            foods: ["잡곡밥 반 공기", "생선 또는 닭고기", "해조류", "채소", "콩류"]
+          },
+          snack: {
+            hint: "간식이 필요하면 허용식품 안에서만 짧게 보완하세요.",
+            foods: ["견과류 소량", "치즈", "무가당 요거트", "단백질 쉐이크"]
+          },
+          dinner: {
+            hint: "저녁은 저탄수 고단백 흐름을 유지하는 쪽이 좋습니다.",
+            foods: ["생선", "닭고기", "두부", "채소", "해조류"]
+          }
+        };
+      }
+
+      if (week === "week3") {
+        return {
+          breakfast: {
+            hint: "단식 다음 날 아침이라면 회복식처럼 너무 과하지 않게 시작하세요.",
+            foods: ["단백질 쉐이크", "삶은 달걀", "무가당 요거트", "토마토"]
+          },
+          lunch: {
+            hint: "점심은 단백질을 충분히 챙기는 쪽으로 가져갑니다.",
+            foods: ["잡곡밥 소량", "생선 또는 닭고기", "채소", "해조류", "콩류"]
+          },
+          snack: {
+            hint: "운동량이 있는 날은 이 타이밍에 보완식이 들어가도 괜찮습니다.",
+            foods: ["베리류", "바나나", "고구마 소량", "견과류", "치즈"]
+          },
+          dinner: {
+            hint: "저녁은 계속 저탄수 위주로 유지합니다.",
+            foods: ["생선", "닭고기", "두부", "채소", "단호박 소량"]
+          }
+        };
+      }
+
+      if (week === "week4") {
+        return {
+          breakfast: {
+            hint: "유지 습관을 굳히는 시기라 아침도 지나치게 흔들지 않는 쪽이 좋습니다.",
+            foods: ["단백질 쉐이크", "삶은 달걀", "무가당 요거트", "과일 1개 중 일부"]
+          },
+          lunch: {
+            hint: "점심은 일반식이더라도 저탄수 원칙을 계속 지켜 보세요.",
+            foods: ["잡곡밥 소량", "생선 또는 닭고기", "채소", "해조류", "콩류"]
+          },
+          snack: {
+            hint: "간식은 여전히 허용식품 안에서만 가볍게 두는 편이 안정적입니다.",
+            foods: ["과일 1개", "견과류 소량", "무가당 요거트", "치즈"]
+          },
+          dinner: {
+            hint: "저녁은 유지기의 핵심 루틴이라 단순하게 끝내는 편이 좋습니다.",
+            foods: ["생선", "두부", "닭고기", "녹황색 채소"]
+          }
+        };
+      }
+
+      return {
+        breakfast: {
+          hint: "유지기에는 오래 갈 수 있는 아침 패턴을 찾는 것이 중요합니다.",
+          foods: ["단백질 위주 아침", "무가당 요거트", "삶은 달걀", "과일 소량"]
+        },
+        lunch: {
+          hint: "점심은 일반식이더라도 과식만 피하면 유지가 훨씬 편해집니다.",
+          foods: ["단백질", "채소", "잡곡밥 소량", "해조류"]
+        },
+        snack: {
+          hint: "습관성 간식 대신 진짜 배고픔일 때만 허용식품으로 보완하세요.",
+          foods: ["견과류 소량", "치즈", "무가당 요거트", "베리류"]
+        },
+        dinner: {
+          hint: "저녁은 가볍게 마무리하는 흐름을 유지기에도 계속 가져가세요.",
+          foods: ["생선", "두부", "채소", "닭고기"]
+        }
+      };
+    }
+
+    function getFastingSummary(dateKey = getTodayKey()) {
+      const todayLog = state.logs[dateKey] || { mealTimes: createEmptyMealTimes() };
+      const previousKey = getPreviousDateKey(dateKey);
+      const previousLog = state.logs[previousKey] || { mealTimes: createEmptyMealTimes() };
+      const todayMeals = getOrderedMealTimes(todayLog);
+      const previousMeals = getOrderedMealTimes(previousLog);
+      const firstMeal = todayMeals[0] || null;
+      const lastMeal = todayMeals[todayMeals.length - 1] || null;
+      const previousLastMeal = previousMeals[previousMeals.length - 1] || null;
+
+      let fastingMinutes = null;
+      if (previousLastMeal && firstMeal) {
+        fastingMinutes = (24 * 60 - previousLastMeal.minutes) + firstMeal.minutes;
+      }
+
+      return {
+        firstMeal,
+        lastMeal,
+        previousLastMeal,
+        fastingMinutes
+      };
+    }
+
+    function getStageInfo() {
+      const today = getTodayKey();
+      const startDate = state.profile.startDate;
+
+      if (!startDate) {
+        return null;
+      }
+
+      const diff = daysBetween(startDate, today);
+      const dayNumber = diff + 1;
+
+      if (diff < 0) {
+        return {
+          plan: plans[0],
+          dayNumber,
+          weekNumber: 0,
+          status: "before-start"
+        };
+      }
+
+      if (dayNumber <= 7) {
+        return { plan: plans[0], dayNumber, weekNumber: 1, status: "active" };
+      }
+
+      if (dayNumber <= 14) {
+        return { plan: plans[1], dayNumber, weekNumber: 2, status: "active" };
+      }
+
+      if (dayNumber <= 21) {
+        return { plan: plans[2], dayNumber, weekNumber: 3, status: "active" };
+      }
+
+      if (dayNumber <= 28) {
+        return { plan: plans[3], dayNumber, weekNumber: 4, status: "active" };
+      }
+
+      return { plan: plans[4], dayNumber, weekNumber: 5, status: "maintenance" };
+    }
+
+    function buildDynamicChecklist(stageInfo) {
+      if (!stageInfo || stageInfo.status === "before-start") {
+        return [];
+      }
+
+      const week = stageInfo.plan.key;
+
+      if (week === "week2") {
+        return [
+          { id: "stage-fast", title: "이번 주 24시간 단식 1회 계획", hint: "본인 일정에서 가장 무리 없는 하루를 미리 정해 두면 실천이 훨씬 편합니다." }
+        ];
+      }
+
+      if (week === "week3") {
+        return [
+          { id: "stage-fast", title: "이번 주 24시간 단식 2회", hint: "연속 단식은 피하고, 단식 후에는 꼭 고단백 회복식을 챙깁니다." },
+          { id: "stage-recover", title: "운동한 날 보완식 확인", hint: "운동량이 많은 날에는 바나나나 고구마 소량으로 회복식을 붙여도 괜찮습니다." }
+        ];
+      }
+
+      if (week === "week4") {
+        return [
+          { id: "stage-fast", title: "이번 주 24시간 단식 3회", hint: "단식일 사이에는 일반식을 넣어 리듬을 무너뜨리지 않는 쪽이 중요합니다." }
+        ];
+      }
+
+      if (week === "maintenance") {
+        return [
+          { id: "stage-balance", title: "주 1~2회 24시간 단식 검토", hint: "유지기에는 과하게 조이기보다 오래 갈 수 있는 강도로 가져가면 됩니다." }
+        ];
+      }
+
+      return [];
+    }
+
+    function renderWeekList(stageInfo) {
+      const activeKey = stageInfo?.plan.key;
+      els.weekList.innerHTML = plans.map((plan) => {
+        const activeClass = plan.key === activeKey ? "week-card active" : "week-card";
+        const chips = plan.chips.map((chip, index) => {
+          const chipClass = index % 2 === 0 ? "chip" : "chip sage";
+          return `<span class="${chipClass}">${chip}</span>`;
+        }).join("");
+
+        return `
+          <article class="${activeClass}">
+            <header>
+              <div>
+                <h3>${plan.title}</h3>
+                <p>${plan.period} · ${plan.focus}</p>
+              </div>
+              <span class="pill">${plan.rhythm}</span>
+            </header>
+            <p>${plan.summary}</p>
+            <div class="chip-row">${chips}</div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function renderChecklist(stageInfo) {
+      const log = getOrCreateTodayLog();
+      const stageItems = buildDynamicChecklist(stageInfo);
+      const items = [...coreChecklist, ...stageItems];
+
+      if (!items.length) {
+        els.checklist.innerHTML = "";
+        els.checklistEmpty.style.display = "block";
         return;
       }
 
-      if (counts.some((count) => count <= 0)) {
-        errorText.textContent = "번수는 0보다 큰 숫자로 입력해주세요.";
-        resultValue.textContent = "-";
-        formulaText.textContent = "값을 입력하면 계산식이 여기에 표시됩니다.";
+      els.checklistEmpty.style.display = "none";
+      els.checklist.innerHTML = items.map((item) => {
+        const checked = log.checks[item.id] ? "checked" : "";
+        return `
+          <label class="check-item">
+            <input type="checkbox" data-check-id="${item.id}" ${checked} />
+            <span>
+              <strong>${item.title}</strong>
+              <span>${item.hint}</span>
+            </span>
+          </label>
+        `;
+      }).join("");
+
+      els.checklist.querySelectorAll("input[type='checkbox']").forEach((checkbox) => {
+        checkbox.addEventListener("change", (event) => {
+          const { checkId } = event.target.dataset;
+          const todayLog = getOrCreateTodayLog();
+          todayLog.checks[checkId] = event.target.checked;
+          saveState();
+          renderStats();
+          renderCalendar();
+        });
+      });
+    }
+
+    function renderMealChecklist() {
+      const log = getOrCreateTodayLog();
+      const stageInfo = getStageInfo();
+      const guidance = getMealGuidance(stageInfo);
+      els.mealGrid.innerHTML = mealChecklist.map((meal) => {
+        const checked = log.checks[meal.id] ? "checked" : "";
+        const timeValue = log.mealTimes?.[meal.key] || "";
+        const foodItems = (guidance[meal.key]?.foods || []).map((food) => `<li>${food}</li>`).join("");
+        return `
+          <article class="meal-card">
+            <div class="meal-toggle">
+              <input type="checkbox" data-check-id="${meal.id}" ${checked} />
+              <div>
+                <strong>${meal.title}</strong>
+                <span class="meal-time">${meal.time}</span>
+                <p>${guidance[meal.key]?.hint || ""}</p>
+              </div>
+            </div>
+            <div class="time-row">
+              <div class="time-field">
+                <span>먹은 시간</span>
+                <input type="time" data-meal-key="${meal.key}" data-check-id="${meal.id}" value="${timeValue}" />
+              </div>
+            </div>
+            <div class="meal-foods">
+              <strong>오늘 이 식사에서 먹기 좋은 것</strong>
+              <ul>${foodItems}</ul>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      els.mealGrid.querySelectorAll("input[type='checkbox']").forEach((checkbox) => {
+        checkbox.addEventListener("change", (event) => {
+          const { checkId } = event.target.dataset;
+          const todayLog = getOrCreateTodayLog();
+          todayLog.checks[checkId] = event.target.checked;
+          saveState();
+          renderStats();
+          renderHistory();
+          renderCalendar();
+        });
+      });
+
+      els.mealGrid.querySelectorAll("input[type='time']").forEach((input) => {
+        input.addEventListener("change", (event) => {
+          const { mealKey, checkId } = event.target.dataset;
+          const todayLog = getOrCreateTodayLog();
+          todayLog.mealTimes[mealKey] = event.target.value;
+          todayLog.checks[checkId] = Boolean(event.target.value);
+          saveState();
+          renderMealChecklist();
+          renderFastingSummary();
+          renderStats();
+          renderHistory();
+          renderCalendar();
+        });
+      });
+    }
+
+    function renderFastingSummary() {
+      const summary = getFastingSummary();
+      const firstLabel = summary.firstMeal
+        ? `${getMealTitle(summary.firstMeal.mealKey)} ${summary.firstMeal.time}`
+        : "-";
+      const previousLabel = summary.previousLastMeal
+        ? `${getMealTitle(summary.previousLastMeal.mealKey)} ${summary.previousLastMeal.time}`
+        : "-";
+
+      els.firstMealTime.textContent = firstLabel;
+      els.previousMealTime.textContent = previousLabel;
+      els.fastingDuration.textContent = summary.fastingMinutes === null
+        ? "-"
+        : minutesToDurationText(summary.fastingMinutes);
+
+      if (summary.fastingMinutes !== null) {
+        els.fastingNote.textContent = `전날 ${getMealTitle(summary.previousLastMeal.mealKey)} ${summary.previousLastMeal.time}부터 오늘 ${getMealTitle(summary.firstMeal.mealKey)} ${summary.firstMeal.time}까지 계산한 추정 공복 시간입니다.`;
         return;
       }
 
-      const inverseTerms = counts.map((count) => `1/${count}`);
-      const inverseSum = counts.reduce((sum, count) => sum + 1 / count, 0);
-      const combinedCount = calculateCombinedCount(counts);
+      if (summary.firstMeal && !summary.previousLastMeal) {
+        els.fastingNote.textContent = "오늘 첫 식사 시간은 기록되어 있지만, 전날 마지막 식사 기록이 없어서 공복 시간을 아직 계산할 수 없습니다.";
+        return;
+      }
 
-      resultValue.textContent = formatCount(combinedCount);
-      formulaText.textContent =
-        `1 / 최종 번수 = ${inverseTerms.join(" + ")}\n` +
-        `1 / 최종 번수 = ${inverseSum.toFixed(6)}\n` +
-        `최종 번수 = ${combinedCount.toFixed(6)}\n` +
-        `대략 ${formatCount(combinedCount)} 정도 굵기`;
+      els.fastingNote.textContent = "전날 마지막 식사와 오늘 첫 식사 시간을 기록하면 공복 시간이 계산됩니다.";
     }
 
-    function reset() {
-      yarnList.innerHTML = "";
-      rowCount = 0;
-      createRow("20");
-      createRow("20");
-      resultValue.textContent = "-";
-      formulaText.textContent = "값을 입력하면 계산식이 여기에 표시됩니다.";
-      errorText.textContent = "";
+    function renderExerciseTracker() {
+      const count = getCurrentWeekExerciseCount();
+      els.exerciseWeekLabel.textContent = `현재 주간 범위: ${getWeekRangeLabel()}`;
+      els.exerciseCount.textContent = `${count}회`;
+      if (count >= 4) {
+        els.exerciseSummary.textContent = "이번 주 목표 운동 횟수를 채웠습니다. 더 했다면 그대로 숫자만 추가해 두셔도 됩니다.";
+        return;
+      }
+
+      els.exerciseSummary.textContent = `이번 주 목표는 4회입니다. 주가 끝날 때까지 ${4 - count}회 남았습니다.`;
     }
 
-    addRowButton.addEventListener("click", () => {
-      errorText.textContent = "";
-      createRow("");
+    function renderCalendar() {
+      const { year, month } = calendarCursor;
+      const firstDay = new Date(year, month, 1);
+      const firstWeekday = (firstDay.getDay() + 6) % 7;
+      const monthLabel = `${year}년 ${month + 1}월`;
+      const cells = [];
+
+      for (let index = 0; index < 42; index += 1) {
+        const dayNumber = index - firstWeekday + 1;
+        const cellDate = new Date(year, month, dayNumber);
+        const dateKey = formatDate(cellDate);
+        const outside = cellDate.getMonth() !== month;
+        const log = state.logs[dateKey];
+        const hasLog = log ? hasLogContent(log) : false;
+        const hasMealTime = log ? Object.values(log.mealTimes || {}).some(Boolean) : false;
+        const hasWeight = Boolean(log?.weight);
+        const weekLabel = getWeekNumberForDate(dateKey);
+        const classes = [
+          "calendar-cell",
+          outside ? "outside" : "",
+          dateKey === getTodayKey() ? "today" : "",
+          dateKey === state.profile.startDate ? "start-day" : ""
+        ].filter(Boolean).join(" ");
+
+        const dots = [
+          hasLog ? '<i class="calendar-dot logged"></i>' : "",
+          hasMealTime ? '<i class="calendar-dot meal"></i>' : "",
+          hasWeight ? '<i class="calendar-dot weight"></i>' : ""
+        ].join("");
+
+        cells.push(`
+          <div class="${classes}">
+            <span class="calendar-day">${cellDate.getDate()}</span>
+            ${weekLabel && !outside ? `<span class="calendar-week-label">${weekLabel}</span>` : ""}
+            <div class="calendar-dots">${dots}</div>
+          </div>
+        `);
+      }
+
+      els.calendarMonthLabel.textContent = monthLabel;
+      els.calendarGrid.innerHTML = cells.join("");
+    }
+
+    function renderToday() {
+      const stageInfo = getStageInfo();
+      renderWeekList(stageInfo);
+      renderMealChecklist();
+      renderFastingSummary();
+      renderExerciseTracker();
+      renderChecklist(stageInfo);
+
+      if (!stageInfo) {
+        els.todayBadge.textContent = "시작일 필요";
+        els.todayHeadline.textContent = "시작일을 먼저 입력해 주세요.";
+        els.todaySummary.textContent = "설정을 저장하면 오늘 단계와 집중할 포인트가 표시됩니다.";
+        els.miniStage.textContent = "-";
+        els.miniFocus.textContent = "-";
+        els.miniRhythm.textContent = "-";
+        return;
+      }
+
+      if (stageInfo.status === "before-start") {
+        const daysLeft = Math.abs(stageInfo.dayNumber) + 1;
+        els.todayBadge.textContent = "시작 전";
+        els.todayHeadline.textContent = `${daysLeft}일 뒤 시작 예정입니다. 준비 루틴을 먼저 가볍게 잡아두세요.`;
+        els.todaySummary.textContent = "물과 수면, 아침·점심·간식·저녁 시간대를 먼저 일정하게 맞춰 두면 초반 적응이 조금 더 편해질 수 있습니다.";
+        els.miniStage.textContent = "준비 단계";
+        els.miniFocus.textContent = "물·수면 정리";
+        els.miniRhythm.textContent = "시작 전 워밍업";
+        return;
+      }
+
+      const todayIndexInWeek = ((stageInfo.dayNumber - 1) % 7) + 1;
+      els.todayBadge.textContent = stageInfo.plan.title;
+      els.todayHeadline.textContent = `${stageInfo.plan.title} ${todayIndexInWeek}일차입니다. 오늘은 ${stageInfo.plan.focus}에 집중해 보세요.`;
+      els.todaySummary.textContent = stageInfo.plan.summary;
+      els.miniStage.textContent = `Day ${stageInfo.dayNumber}`;
+      els.miniFocus.textContent = stageInfo.plan.focus;
+      els.miniRhythm.textContent = stageInfo.plan.rhythm;
+    }
+
+    function renderForm() {
+      els.startDate.value = state.profile.startDate;
+      els.startWeight.value = state.profile.startWeight;
+      els.currentWeight.value = state.profile.currentWeight;
+
+      const todayLog = getOrCreateTodayLog();
+      els.energy.value = todayLog.energy || "";
+      els.memo.value = todayLog.memo || "";
+    }
+
+    function saveProfile() {
+      state.profile.startDate = els.startDate.value || formatDate(new Date());
+      state.profile.startWeight = els.startWeight.value.trim();
+      state.profile.currentWeight = els.currentWeight.value.trim();
+
+      const todayLog = getOrCreateTodayLog();
+      if (state.profile.currentWeight) {
+        todayLog.weight = state.profile.currentWeight;
+      }
+
+      saveState();
+      els.profileFeedback.textContent = "설정을 저장했습니다. 오늘 루틴과 기록 카드도 함께 갱신했어요.";
+      renderAll();
+    }
+
+    function saveLog() {
+      const todayLog = getOrCreateTodayLog();
+      todayLog.weight = els.currentWeight.value.trim();
+      todayLog.energy = els.energy.value.trim();
+      todayLog.memo = els.memo.value.trim();
+
+      if (els.currentWeight.value.trim()) {
+        state.profile.currentWeight = els.currentWeight.value.trim();
+      }
+
+      saveState();
+      els.profileFeedback.textContent = "오늘 기록을 저장했습니다. 변화가 아래 히스토리에 반영됩니다.";
+      renderStats();
+      renderHistory();
+      renderCalendar();
+    }
+
+    function fillTodayFromProfile() {
+      const todayLog = getOrCreateTodayLog();
+      els.currentWeight.value = state.profile.currentWeight || todayLog.weight || "";
+      els.energy.value = todayLog.energy || "";
+      els.memo.value = todayLog.memo || "";
+      els.profileFeedback.textContent = "저장된 값으로 오늘 입력칸을 채웠습니다.";
+    }
+
+    function formatWeight(value) {
+      if (!value) {
+        return "-";
+      }
+
+      return `${Number(value).toFixed(1)}kg`;
+    }
+
+    function renderStats() {
+      const entries = Object.entries(state.logs)
+        .filter(([, log]) => hasLogContent(log))
+        .sort((a, b) => a[0] < b[0] ? 1 : -1);
+      const weightedEntries = Object.entries(state.logs)
+        .filter(([, log]) => log.weight)
+        .sort((a, b) => a[0] < b[0] ? 1 : -1);
+
+      const latest = entries[0]?.[1];
+      const latestWeight = latest?.weight || state.profile.currentWeight;
+      els.latestWeight.textContent = formatWeight(latestWeight);
+
+      const baselineWeight = state.profile.startWeight
+        ? Number(state.profile.startWeight)
+        : (weightedEntries.length ? Number(weightedEntries[weightedEntries.length - 1][1].weight) : null);
+
+      if (baselineWeight !== null && latestWeight) {
+        const recentWeight = Number(latestWeight);
+        const firstWeight = baselineWeight;
+        const diff = recentWeight - firstWeight;
+        const prefix = diff > 0 ? "+" : "";
+        els.weightChange.textContent = `${prefix}${diff.toFixed(1)}kg`;
+      } else {
+        els.weightChange.textContent = "-";
+      }
+
+      els.logDays.textContent = `${entries.length}일`;
+    }
+
+    function renderHistory() {
+      const entries = Object.entries(state.logs)
+        .filter(([, log]) => hasLogContent(log))
+        .sort((a, b) => a[0] < b[0] ? 1 : -1)
+        .slice(0, 7);
+
+      if (!entries.length) {
+        els.historyList.innerHTML = "";
+        els.historyEmpty.style.display = "block";
+        return;
+      }
+
+      els.historyEmpty.style.display = "none";
+      els.historyList.innerHTML = entries.map(([date, log]) => {
+        const parts = [];
+        if (log.weight) {
+          parts.push(`체중 ${Number(log.weight).toFixed(1)}kg`);
+        }
+        if (log.energy) {
+          parts.push(`컨디션: ${escapeHtml(log.energy)}`);
+        }
+        const meals = getOrderedMealTimes(log);
+        if (meals.length) {
+          const firstMeal = meals[0];
+          const lastMeal = meals[meals.length - 1];
+          parts.push(`식사 ${firstMeal.time}~${lastMeal.time}`);
+        }
+
+        const memo = log.memo
+          ? `<span class="note-line">${escapeHtml(log.memo)}</span>`
+          : `<span class="note-line">${parts.join(" · ") || "기록이 저장되어 있습니다."}</span>`;
+        return `
+          <div class="history-item">
+            <strong>${date}</strong>
+            <span>${parts.join(" · ") || "기본 기록 저장"}</span>
+            ${memo}
+          </div>
+        `;
+      }).join("");
+    }
+
+    function escapeHtml(value) {
+      return value
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function renderAll() {
+      renderForm();
+      renderToday();
+      renderStats();
+      renderHistory();
+      renderCalendar();
+    }
+
+    function resetAll() {
+      if (!window.confirm("저장된 설정과 기록을 모두 지울까요?")) {
+        return;
+      }
+
+      localStorage.removeItem(STORAGE_KEY);
+      state = loadState();
+      els.profileFeedback.textContent = "기록을 초기화했습니다. 새로 시작할 수 있어요.";
+      renderAll();
+    }
+
+    els.saveProfile.addEventListener("click", saveProfile);
+    els.saveLog.addEventListener("click", saveLog);
+    els.fillToday.addEventListener("click", fillTodayFromProfile);
+    els.resetAll.addEventListener("click", resetAll);
+    els.exerciseMinus.addEventListener("click", () => adjustExerciseCount(-1));
+    els.exercisePlus.addEventListener("click", () => adjustExerciseCount(1));
+    els.calendarPrev.addEventListener("click", () => {
+      const next = new Date(calendarCursor.year, calendarCursor.month - 1, 1);
+      calendarCursor = { year: next.getFullYear(), month: next.getMonth() };
+      renderCalendar();
+    });
+    els.calendarNext.addEventListener("click", () => {
+      const next = new Date(calendarCursor.year, calendarCursor.month + 1, 1);
+      calendarCursor = { year: next.getFullYear(), month: next.getMonth() };
+      renderCalendar();
+    });
+    els.jumpToday.addEventListener("click", () => {
+      document.getElementById("todaySection").scrollIntoView({ behavior: "smooth", block: "start" });
     });
 
-    calculateButton.addEventListener("click", calculate);
-    resetButton.addEventListener("click", reset);
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js").catch(() => {
+          /* Ignore registration failures for local file previews. */
+        });
+      });
+    }
 
-    reset();
+    renderAll();
   </script>
 </body>
 </html>
