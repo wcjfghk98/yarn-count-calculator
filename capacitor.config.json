@@ -1,9 +1,0 @@
-{
-  "appId": "com.wcjfghk98.switchondiet",
-  "appName": "SwitchOn Diet",
-  "webDir": ".",
-  "bundledWebRuntime": false,
-  "server": {
-    "iosScheme": "https"
-  }
-}
